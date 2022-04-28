@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.mapper.IBoardMapper">
+	<insert id="Upload" parameterType="BoardDTO">
+		INSERT INTO REVIEWBOARD(BOARD_NO, COURSENAME, TITLE, CONTENTS, IMGLINK, USER_NO, REGDATE)
+		VALUES((SELECT NULLIF (MAX(A.BOARD_NO),0)+1 FROM REVIEWBOARD A),
+		                            #{coursename}, #{title}, #{contents}, #{imglink}, #{user_no}, #{regdate})
+	</insert>
+
+	<!-- 게시판 리스트 쿼리 -->
+	<select id="getBoardList" resultType="BoardDTO">
+		SELECT B.BOARD_NO, B.COURSENAME, B.TITLE, U.USER_NAME, B.REGDATE
+		FROM REVIEWBOARD B, USER_INFO U
+		WHERE B.USER_NO = U.USER_NO
+		ORDER BY B.REGDATE DESC
+	</select>
+
+	<!-- 게시판 상세보기 쿼리 -->
+	<select id="getBoardInfo" resultType="BoardDTO">
+		SELECT B.BOARD_NO, B.COURSENAME, B.TITLE, B.CONTENTS, B.IMGLINK, U.USER_NAME, B.REGDATE
+		FROM REVIEWBOARD B, USER_INFO U
+		WHERE B.USER_NO = U.USER_NO
+		  AND B.BOARD_NO = #{board_no}
+	</select>
+
+</mapper>

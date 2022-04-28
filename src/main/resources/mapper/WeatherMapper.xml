@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.mapper.IWeatherMapper">
+
+	<!--회원가입-->
+	<select id="selectArea" resultType="WeatherDTO" parameterType="Map">
+		<choose>
+			<when test="type == 'city'">
+				SELECT
+				AREACODE, STEP1
+				FROM
+				TB_WEATHER_AREA
+				WHERE
+				STEP2 is null
+				ORDER BY
+				STEP1
+			</when>
+
+			<when test="type == 'county'">
+				SELECT
+				areacode, step2
+				FROM
+				TB_WEATHER_AREA
+				WHERE
+				step1 = #{keyword} AND step2 is not null AND step3 is null
+				ORDER BY
+				STEP2
+			</when>
+
+			<when test="type == 'town'">
+				SELECT
+				areacode, step3
+				FROM
+				TB_WEATHER_AREA
+				WHERE
+				step2 = #{keyword} AND step3 != ''
+				ORDER BY
+				STEP3
+			</when>
+		</choose>
+	</select>
+	<select id="selectCoordinate" resultType="WeatherDTO" parameterType="WeatherDTO">
+		SELECT
+			gridX , gridY
+		FROM
+			TB_WEATHER_AREA
+		WHERE
+			areacode = #{areacode}
+	</select>
+</mapper>
