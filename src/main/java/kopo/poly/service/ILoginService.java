@@ -7,4 +7,12 @@ import java.util.Map;
 public interface ILoginService {
 
     UserDTO login(Map<String, String > map) throws Exception;
+
+    UserDTO findByemail(UserDTO pDTO);
+
+    int findIdCheck(UserDTO pDTO)throws Exception;
+
+    int findPwCheck(UserDTO pDTO)throws Exception;
+
+    void resetPw(UserDTO pDTO) throws Exception;
 }

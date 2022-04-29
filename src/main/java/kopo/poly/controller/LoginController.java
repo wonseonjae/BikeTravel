@@ -3,8 +3,10 @@ package kopo.poly.controller;
 import kopo.poly.dto.UserDTO;
 import kopo.poly.service.ILoginService;
 import kopo.poly.service.impl.LoginService;
+import kopo.poly.util.CmmUtil;
 import kopo.poly.util.UseSha256;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,5 +75,40 @@ public class LoginController {
         log.info("로그아웃 완료");
 
         return "/main";
+    }
+
+    @GetMapping(value = "/findIdPw")
+    public String findIdPw() {
+        log.info(this.getClass().getName()+ ".findIdPw 시작");
+
+        return "/signUp/find";
+    }
+
+    @PostMapping(value = "/findId")
+    public String findId(HttpServletRequest request, Model model) throws Exception {
+        log.info(this.getClass().getName()+".findID 시작");
+        String mailid = CmmUtil.nvl(request.getParameter("user_mailid"));
+        String maildomain= CmmUtil.nvl(request.getParameter("user_maildomain"));
+        log.info("이메일 : " + mailid + "@" + maildomain);
+        UserDTO pDTO = new UserDTO();
+        pDTO.setUser_mailid(mailid);
+        pDTO.setUser_maildomain(maildomain);
+        UserDTO rDTO = loginService.findByemail(pDTO);
+        if(loginService.findIdCheck(pDTO)==0) {
+            model.addAttribute("msg", "이메일을 확인해주세요");
+            return "/signUp/find";
+        }else {
+            String userid = rDTO.getUser_id();
+            model.addAttribute("userid", userid);
+            log.info(this.getClass().getName()+".findId 끝");
+            return "/signUp/findIdResult";
+
+        }
+    }
+    @GetMapping(value = "/findPw")
+    public String findPwView() throws Exception{
+
+
+        return "/signUp/findPw";
     }
 }

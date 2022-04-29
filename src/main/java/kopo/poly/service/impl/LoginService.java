@@ -14,6 +14,9 @@ import java.util.Map;
 @Service
 public class LoginService implements ILoginService {
     @Autowired
+    private MailService mailService;
+
+    @Autowired
     private ILoginMapper userMapper;
 
     @Override
@@ -22,5 +25,32 @@ public class LoginService implements ILoginService {
         log.info(String.valueOf(map));
 
         return userMapper.login(map);
+    }
+
+    @Override
+    public UserDTO findByemail(UserDTO pDTO) {
+        log.info(this.getClass().getName()+".findByemail 시작");
+        return userMapper.findId(pDTO);
+    }
+
+    @Override
+    public int findIdCheck(UserDTO pDTO)throws Exception{
+        return userMapper.findIdCheck(pDTO);
+    }
+
+    @Override
+    public int findPwCheck(UserDTO pDTO)throws Exception{
+        return userMapper.findPwCheck(pDTO);
+    }
+
+    @Override
+    public void resetPw(UserDTO pDTO) throws Exception {
+        String user_mailid = pDTO.getUser_mailid();
+        String user_maildomain = pDTO.getUser_maildomain();
+        String userEmail = user_mailid +"@"+user_maildomain;
+        String userPw = mailService.sendPassword(userEmail);
+        pDTO.setUser_pw(userPw);
+        userMapper.resetPw(pDTO);
+
     }
 }

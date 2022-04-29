@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/signUpReg")
-    public String signUp(HttpSession session, HttpServletRequest request) {
+    public String signUp(HttpServletRequest request) {
 
         log.info(this.getClass().getName() + ".SingUpReg start");
 

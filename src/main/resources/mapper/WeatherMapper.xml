@@ -43,10 +43,10 @@
 	</select>
 	<select id="selectCoordinate" resultType="WeatherDTO" parameterType="WeatherDTO">
 		SELECT
-			gridX , gridY
+			GRIDX , GRIDY
 		FROM
 			TB_WEATHER_AREA
 		WHERE
-			areacode = #{areacode}
+			AREACODE = #{areacode}
 	</select>
 </mapper>

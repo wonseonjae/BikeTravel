@@ -8,5 +8,17 @@
 		from USER_INFO
 		where USER_ID = #{userid} and USER_PW = #{userpwd}
 	</select>
+	<select id="findId" parameterType="UserDTO" resultType="UserDTO">
+		select USER_ID from USER_INFO where USER_MAILID = #{user_mailid} and USER_MAILDOMAIN = #{user_maildomain}
+	</select>
+	<select id="findIdCheck" resultType="int" parameterType="UserDTO">
+		select count(*) from USER_INFO where USER_MAILID = #{user_mailid} and USER_MAILDOMAIN = #{user_maildomain}
+	</select>
+	<select id="findPwCheck" resultType="int" parameterType="UserDTO">
+		select count(*) from USER_INFO where USER_MAILID = #{user_mailid} and USER_MAILDOMAIN = #{user_maildomain} and USER_ID = #{user_id}
+	</select>
+	<update id="resetPw" parameterType="UserDTO">
+		update USER_INFO set USER_PW = #{user_pw} where USER_MAILID = #{user_mailid} and USER_MAILDOMAIN = #{user_maildomain} and USER_ID = #{user_id}
+	</update>
 
 </mapper>

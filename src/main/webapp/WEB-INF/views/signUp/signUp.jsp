@@ -62,13 +62,15 @@
             }
 
         }
-    </script>    <script>
-         function mailcheck(){
-        let i = document.join.mail3.selectedIndex // 선택항목의 인덱스 번호
-        let mail=document.join.mail3.options[i].value // 선택항목 value
-        document.join.user_maildomain.value=mail
+    </script>
+    <script>
+        function mailcheck(){
+            let i = document.join.mail3.selectedIndex // 선택항목의 인덱스 번호
+            let mail = document.join.mail3.options[i].value // 선택항목 value
+            document.join.user_maildomain.value=mail
     }
-    </script>    <script>
+    </script>
+    <script>
         function emailSend(){
             let clientEmailId = document.getElementById('user_mailid').value;
             let clientEmailDomain = document.getElementById('user_maildomain').value;

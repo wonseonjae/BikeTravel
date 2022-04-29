@@ -68,7 +68,7 @@
             <input type="password" name="userpwd" id="userpwd" class="form-control" placeholder="Password" required><br>
             <div class="checkbox">
                 <label>
-                    &nbsp;&nbsp;<a href="">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="">아이디&nbsp;|&nbsp;비밀번호찾기</a>
+                    &nbsp;&nbsp;<a href="/signUp">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/findIdPw">아이디&nbsp;|&nbsp;비밀번호찾기</a>
                 </label>
             </div>
             <button id="btn-Yes" class="btn btn-lg btn-primary btn-block" type="submit">로 그 인</button>

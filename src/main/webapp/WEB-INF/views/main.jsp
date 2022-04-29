@@ -9,7 +9,7 @@
 </head>
 <body>
 <img width="25" height="25" src="">
-<%
+<%--<%
    int midx = 0;
 
    if (session.getAttribute("user") != null) {
@@ -29,7 +29,7 @@
          <li><a href="mypage">마이페이지</a></li>
          <li><a href="logout">로그아웃</a> </li>
       </ul>
-   <%};%>
+   <%};%>--%>
 </div>
 <p>안녕하세요 ${user.user_name}님</p>
 <form>
