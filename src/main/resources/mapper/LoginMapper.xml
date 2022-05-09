@@ -4,7 +4,7 @@
 <!-- JAVA와 연결할 Mapper 파일 설정 -->
 <mapper namespace="kopo.poly.mapper.ILoginMapper">
 	<select id="login" parameterType="map" resultType="UserDTO">
-		select USER_NO, USER_NAME, USER_ID, AUTHORITY
+		select *
 		from USER_INFO
 		where USER_ID = #{userid} and USER_PW = #{userpwd}
 	</select>
@@ -20,5 +20,8 @@
 	<update id="resetPw" parameterType="UserDTO">
 		update USER_INFO set USER_PW = #{user_pw} where USER_MAILID = #{user_mailid} and USER_MAILDOMAIN = #{user_maildomain} and USER_ID = #{user_id}
 	</update>
+	<delete id="deleteUser" parameterType="UserDTO">
+		delete from USER_INFO where USER_NO =#{user_no} 
+	</delete>
 
 </mapper>

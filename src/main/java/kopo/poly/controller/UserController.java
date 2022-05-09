@@ -1,5 +1,6 @@
 package kopo.poly.controller;
 
+import kopo.poly.dto.BoardDTO;
 import kopo.poly.dto.UserDTO;
 import kopo.poly.service.impl.UserService;
 import kopo.poly.util.CmmUtil;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -23,10 +25,10 @@ public class UserController {
     UserService userService;
 
     //메인화면
-    @GetMapping("/index")
+    @GetMapping("/main")
     public String MainPage() {
         log.info(this.getClass().getName() + " MainPage");
-        return "/index";
+        return "/main";
     }
 
     //테스트
@@ -42,6 +44,13 @@ public class UserController {
         log.info(this.getClass().getName() + ".SignUpForm start");
         return "signUp/signUp";
     }
+
+    @GetMapping("/myPage")
+    public String Mypage() {
+        log.info(this.getClass().getName() + ".SignUpForm start");
+        return "signUp/myPage";
+    }
+
 
     @PostMapping("/signUpReg")
     public String signUp(HttpServletRequest request) {

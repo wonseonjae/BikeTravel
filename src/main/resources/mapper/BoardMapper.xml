@@ -15,14 +15,37 @@
 		FROM REVIEWBOARD B, USER_INFO U
 		WHERE B.USER_NO = U.USER_NO
 		ORDER BY B.REGDATE DESC
+
 	</select>
+
+	<!-- 게시판 리스트 쿼리 -->
+	<select id="getBoardListByCourse" resultType="BoardDTO">
+		SELECT B.BOARD_NO, B.COURSENAME, B.TITLE, U.USER_NAME, B.REGDATE
+		FROM REVIEWBOARD B, USER_INFO U
+		WHERE B.USER_NO = U.USER_NO and B.COURSENAME =#{coursename}
+		ORDER BY B.REGDATE DESC
+	</select>
+
 
 	<!-- 게시판 상세보기 쿼리 -->
 	<select id="getBoardInfo" resultType="BoardDTO">
-		SELECT B.BOARD_NO, B.COURSENAME, B.TITLE, B.CONTENTS, B.IMGLINK, U.USER_NAME, B.REGDATE
+		SELECT B.BOARD_NO, B.COURSENAME, B.TITLE, B.CONTENTS, B.IMGLINK, U.USER_NAME, B.REGDATE, B.USER_NO
 		FROM REVIEWBOARD B, USER_INFO U
 		WHERE B.USER_NO = U.USER_NO
 		  AND B.BOARD_NO = #{board_no}
+	</select>
+	<!-- 게시판 글 수정 쿼리-->
+	<update id="boardUpdate" parameterType="BoardDTO">
+		update REVIEWBOARD set TITLE=#{title}, CONTENTS=#{contents}, IMGLINK=#{imglink}, REGDATE=#{regdate} where BOARD_NO=#{board_no}
+	</update>
+	<!-- 게시판 글 삭제 쿼리-->
+	<delete id="boardDelete" parameterType="BoardDTO">
+		delete from REVIEWBOARD WHERE BOARD_NO=#{board_no}
+	</delete>
+
+	<!-- 페이징처리 -->
+	<select id="totalCount" resultType="int">
+		select count(*) from REVIEWBOARD
 	</select>
 
 </mapper>

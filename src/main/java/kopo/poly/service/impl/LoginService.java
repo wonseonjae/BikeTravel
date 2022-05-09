@@ -53,4 +53,11 @@ public class LoginService implements ILoginService {
         userMapper.resetPw(pDTO);
 
     }
+
+    @Override
+    public void deleteUser(UserDTO pDTO) throws Exception {
+
+        userMapper.deleteUser(pDTO);
+
+    }
 }

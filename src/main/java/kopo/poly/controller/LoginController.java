@@ -8,6 +8,7 @@ import kopo.poly.util.UseSha256;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,30 +38,29 @@ public class LoginController {
         String userpwd = UseSha256.encrypt(map.get("userpwd"));
         log.info(userpwd);
         map.put("userpwd", userpwd);
-        log.info(String.valueOf(map));
+
 
         try {
             if (map.get("userid") == null || map.get("userpwd") == null) {
                 log.info("로그인 에러1");
                 model.addAttribute("msg", "아이디 또는 비밀번호를 입력해주세요");
-                return "error/error";
+                return "/signUp/MsgToMain";
             }
             UserDTO rDTO = loginService.login(map);
             if (rDTO != null) {
                 session.setAttribute("user", rDTO);
-                String valeu = String.valueOf(session.getAttribute("user"));
-                log.info(valeu);
+                log.info("로그인 세션생성 완료");
 
             } else {
                 log.info("로그인 에러2");
                 model.addAttribute("msg", "아이디 또는 비밀번호가 올바르지 않습니다.");
-                return "error/error";
+                return "/signUp/MsgToMain";
             }
         } catch (Exception e) {
             e.printStackTrace();
             log.info("로그인 에러3");
             model.addAttribute("msg", "로그인 중 문제가 발생했습니다.");
-            return "error/error";
+            return "/signUp/MsgToMain";
         }
         log.info(this.getClass().getName() + ".login end");
         return "/main";
@@ -110,5 +110,27 @@ public class LoginController {
 
 
         return "/signUp/findPw";
+    }
+
+    @GetMapping(value = "/pwCheck")
+    public String pwCheck() {
+
+        return "/signUp/pwCheck";
+    }
+
+    @GetMapping(value = "/deleteUser")
+    public String deleteUser(HttpSession session, HttpServletRequest request, Model model) throws Exception {
+        log.info(this.getClass().getName()+".deleteUser start!");
+        int user_no = Integer.valueOf(CmmUtil.nvl(request.getParameter("user_no")));
+        UserDTO pDTO = new UserDTO();
+        pDTO.setUser_no(user_no);
+
+        loginService.deleteUser(pDTO);
+        session.invalidate();
+
+        model.addAttribute("msg", "회원탈퇴가 완료되었습니다");
+        log.info(this.getClass().getName()+".deleteUser end!");
+
+        return "/signUp/MsgToMain";
     }
 }

@@ -31,4 +31,13 @@
 		SELECT CASE WHEN COUNT(USER_NO)=1 THEN 'Y' ELSE 'N' END USES_EXISTS FROM USER_INFO WHERE USER_MAILID=#{user_mailid} and USER_MAILDOMAIN=#{user_maildomain}
 	</select>
 
+	<!--마이페이지 비밀번호 체크 -->
+	<select id="pwCheck" parameterType="UserDTO" resultType="UserDTO">
+		select USER_PW from USER_INFO where USER_PW=#{user_pw}
+	</select>
+
+
+
+
+
 </mapper>

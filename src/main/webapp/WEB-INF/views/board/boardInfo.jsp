@@ -1,34 +1,40 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="UTF-8" %>
 <%@ page import="kopo.poly.dto.BoardDTO" %>
 <%@ page import="kopo.poly.util.CmmUtil" %>
+<%@ page import="kopo.poly.dto.UserDTO" %>
 <%
+
 	BoardDTO rDTO = (BoardDTO) request.getAttribute("rDTO");
-	BoardDTO uDTO = (BoardDTO) request.getAttribute("user");
 
 //공지글 정보를 못불러왔다면, 객체 생성
 	if (rDTO == null) {
 		rDTO = new BoardDTO();
 
 	}
-
-	String ss_user_no = String.valueOf(uDTO.getUser_no());
-
-//본인이 작성한 글만 수정 가능하도록 하기(1:작성자 아님 / 2: 본인이 작성한 글 / 3: 로그인안함)
 	int edit = 1;
 
-//로그인 안했다면....
-	if (ss_user_no.equals("")) {
+//본인이 작성한 글만 수정 가능하도록 하기(1:작성자 아님 / 2: 본인이 작성한 글 / 3: 로그인안함)
+	if (session.getAttribute("user")==null) {
 		edit = 3;
+	} else {
+		UserDTO uDTO = (UserDTO) session.getAttribute("user");
+		int ss_user_no = uDTO.getUser_no();
+
+//로그인 안했다면....
+		if (uDTO == null) {
+			edit = 3;
 
 //본인이 작성한 글이면 2가 되도록 변경
-	} else if (ss_user_no.equals(String.valueOf(rDTO.getUser_no()))) {
-		edit = 2;
+		} else if (ss_user_no == rDTO.getUser_no()) {
 
+			edit = 2;
+
+		}
 	}
 
-	System.out.println("user_no : " + rDTO.getUser_no());
-	System.out.println("ss_user_no : " + ss_user_no);
+
 
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -41,7 +47,7 @@
 		//수정하기
 		function doEdit() {
 			if ("<%=edit%>" == 2) {
-				location.href = "/board/boardEditInfo?nSeq=<%=CmmUtil.nvl(String.valueOf(rDTO.getUser_no()))%>";
+				location.href = "/board/boardEditInfo?nSeq=<%=CmmUtil.nvl(String.valueOf(rDTO.getBoard_no()))%>";
 
 			} else if ("<%=edit%>" == 3) {
 				alert("로그인 하시길 바랍니다.");
@@ -57,7 +63,7 @@
 		function doDelete() {
 			if ("<%=edit%>" == 2) {
 				if (confirm("작성한 글을 삭제하시겠습니까?")) {
-					location.href = "/board/boardDelete?nSeq=<%=String.valueOf(rDTO.getBoard_no())%>";
+					location.href = "/boardDelete?nSeq=<%=String.valueOf(rDTO.getBoard_no())%>";
 
 				}
 
@@ -100,7 +106,15 @@
 	<tr>
 		<td colspan="4" height="300px" valign="top">
 			<%=CmmUtil.nvl(rDTO.getContents()).replaceAll("\r\n", "<br/>") %>
-			<img src="<%=CmmUtil.nvl(rDTO.getImglink())%>">
+			<c:set var="link" value="<%=CmmUtil.nvl(rDTO.getImglink())%>"></c:set>
+			<c:choose>
+			<c:when test="${link eq ''}">
+			</c:when>
+			<c:otherwise>
+				<img src="<%=CmmUtil.nvl(rDTO.getImglink())%>" width="150px" height="150px">
+			</c:otherwise>
+
+			</c:choose>
 		</td>
 	</tr>
 	<tr>

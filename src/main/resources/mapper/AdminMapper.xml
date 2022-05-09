@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.mapper.IAdminMapper">
+	<!--관리자 유저목록 호출-->
+	<select id="getUserList" parameterType="UserDTO" resultType="UserDTO">
+		SELECT * from USER_INFO
+	</select>
+
+	<!--관리자 유저정보 호출 -->
+	<select id="getUserInfo" parameterType="UserDTO" resultType="UserDTO">
+		SELECT * from USER_INFO WHERE USER_NO=#{user_no}
+	</select>
+
+	<!-- 작성글 리스트 쿼리 -->
+	<select id="getUserBoard" parameterType="UserDTO" resultType="BoardDTO">
+		SELECT B.BOARD_NO, B.COURSENAME, B.TITLE, U.USER_NAME, B.REGDATE
+		FROM REVIEWBOARD B, USER_INFO U
+		WHERE B.USER_NO = U.USER_NO and U.USER_NO =#{user_no}
+		ORDER BY B.REGDATE DESC
+	</select>
+	<!-- 게시판 상세보기 쿼리 -->
+	<select id="getBoardInfo" parameterType="UserDTO" resultType="BoardDTO">
+		SELECT B.BOARD_NO, B.COURSENAME, B.TITLE, B.CONTENTS, B.IMGLINK, U.USER_NAME, B.REGDATE, B.USER_NO
+		FROM REVIEWBOARD B, USER_INFO U
+		WHERE B.USER_NO = U.USER_NO
+		  AND B.BOARD_NO = #{board_no}
+	</select>
+	<!-- 게시판 글 삭제 쿼리-->
+	<delete id="boardDelete" parameterType="UserDTO">
+		delete from REVIEWBOARD WHERE BOARD_NO=#{board_no}
+	</delete>
+
+	<!-- 회원 삭제 쿼리 -->
+	<delete id="userDelete" parameterType="UserDTO">
+		delete from USER_INFO where USER_NO=#{user_no}
+	</delete>
+
+	<!-- 회원 비밀번호 체크 -->
+	<select id="pwCheck" parameterType="UserDTO" resultType="int">
+		select count(USER_NO) from USER_INFO where USER_PW=#{user_pw} and USER_NO=#{user_no}
+	</select>
+
+	<!-- 회원 닉네임 변경 -->
+	<update id="chgName" parameterType="UserDTO">
+		update USER_INFO set USER_Name=#{user_name} where USER_NO=#{user_no}
+	</update>
+
+	<!-- 회원 비밀번호 변경 -->
+	<update id="chgPw" parameterType="UserDTO">
+		update USER_INFO set USER_PW=#{user_pw} where USER_NO=#{user_no}
+	</update>
+
+</mapper>

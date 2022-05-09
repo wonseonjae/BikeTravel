@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -119,6 +120,8 @@ public class UserService implements IUserService {
         log.info(this.getClass().getName() + ".idCheck end");
         return res;
     }
+
+
 
 
 }

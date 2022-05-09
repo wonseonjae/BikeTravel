@@ -2,6 +2,7 @@ package kopo.poly.service;
 
 import kopo.poly.dto.UserDTO;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ILoginService {
@@ -15,4 +16,8 @@ public interface ILoginService {
     int findPwCheck(UserDTO pDTO)throws Exception;
 
     void resetPw(UserDTO pDTO) throws Exception;
+
+    void deleteUser(UserDTO pDTO) throws Exception;
+
+
 }
