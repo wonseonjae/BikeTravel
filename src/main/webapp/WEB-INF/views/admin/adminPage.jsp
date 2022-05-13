@@ -35,7 +35,7 @@
 
 		//상세보기 이동
 		function doDetail(bNo) {
-			location.href = "/admin/userInfo?bNo="+bNo;
+			location.href = "/userDetail?bNo="+bNo;
 		}
 
 	</script>

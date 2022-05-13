@@ -78,7 +78,7 @@
 
 		//목록으로 이동
 		function doList() {
-			location.href = "/board/boardList";
+			location.href = "/board/list";
 
 		}
 

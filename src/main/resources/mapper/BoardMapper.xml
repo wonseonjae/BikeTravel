@@ -48,4 +48,31 @@
 		select count(*) from REVIEWBOARD
 	</select>
 
+	<select id="totalCountByCourse" parameterType="BoardDTO" resultType="int">
+		select count(*) from REVIEWBOARD WHERE COURSENAME=#{coursename}
+	</select>
+
+	<select id="getListPaging" resultType="BoardDTO">
+
+		select * from (
+		select R.BOARD_NO, R.COURSENAME, R.TITLE, R.CONTENTS, R.REGDATE, U.USER_NAME, R.IMGLINK
+		from REVIEWBOARD R, USER_INFO U
+		WHERE U.USER_NO = R.USER_NO
+		order by BOARD_NO desc) as T1
+		limit #{skip},#{amount}
+
+	</select>
+
+	<select id="getListPagingByCourse" parameterType="java.util.HashMap" resultType="BoardDTO">
+
+		select * from (
+						  select R.BOARD_NO, R.COURSENAME, R.TITLE, R.CONTENTS, R.REGDATE, U.USER_NAME, R.IMGLINK
+						  from REVIEWBOARD R, USER_INFO U
+						  WHERE U.USER_NO = R.USER_NO and R.COURSENAME=#{coursename}
+						  order by BOARD_NO desc) as T1
+						  limit #{skip},#{amount}
+
+	</select>
+
+
 </mapper>

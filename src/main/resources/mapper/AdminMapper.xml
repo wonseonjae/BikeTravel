@@ -21,19 +21,20 @@
 		ORDER BY B.REGDATE DESC
 	</select>
 	<!-- 게시판 상세보기 쿼리 -->
-	<select id="getBoardInfo" parameterType="UserDTO" resultType="BoardDTO">
+	<select id="userBoardDetail" parameterType="BoardDTO" resultType="BoardDTO">
 		SELECT B.BOARD_NO, B.COURSENAME, B.TITLE, B.CONTENTS, B.IMGLINK, U.USER_NAME, B.REGDATE, B.USER_NO
 		FROM REVIEWBOARD B, USER_INFO U
 		WHERE B.USER_NO = U.USER_NO
 		  AND B.BOARD_NO = #{board_no}
 	</select>
+
 	<!-- 게시판 글 삭제 쿼리-->
-	<delete id="boardDelete" parameterType="UserDTO">
+	<delete id="boardDelete" parameterType="BoardDTO">
 		delete from REVIEWBOARD WHERE BOARD_NO=#{board_no}
 	</delete>
 
 	<!-- 회원 삭제 쿼리 -->
-	<delete id="userDelete" parameterType="UserDTO">
+	<delete id="deleteUser" parameterType="UserDTO">
 		delete from USER_INFO where USER_NO=#{user_no}
 	</delete>
 

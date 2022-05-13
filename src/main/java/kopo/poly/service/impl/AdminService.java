@@ -29,7 +29,7 @@ public class AdminService implements IAdminService {
     public UserDTO getUserInfo(UserDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName()+".getUserInfo start");
-        return getUserInfo(pDTO);
+        return adminMapper.getUserInfo(pDTO);
     }
 
     @Override
@@ -40,16 +40,12 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public BoardDTO getBoardInfo(UserDTO pDTO) throws Exception {
-
-        log.info(this.getClass().getName()+".getBoardInfo start");
-
-        return adminMapper.getBoardInfo(pDTO);
-
+    public BoardDTO userBoardDetail(BoardDTO pDTO) throws Exception {
+        return adminMapper.userBoardDetail(pDTO);
     }
 
     @Override
-    public void boardDelete(UserDTO pDTO) throws Exception {
+    public void boardDelete(BoardDTO pDTO) throws Exception {
         log.info(this.getClass().getName()+".boardDelete start");
         adminMapper.boardDelete(pDTO);
     }

@@ -32,6 +32,7 @@ public class UserController {
     }
 
     //테스트
+    @CrossOrigin("*")
     @GetMapping("/test")
     public String Test() {
         log.info(this.getClass().getName() + " MainPage");

@@ -43,24 +43,26 @@ public class AdminController {
         return "/admin/adminPage";
     }
 
-    @GetMapping(value = "/admin/userInfo")
-    public String userInfo(HttpServletRequest request, Model model) {
+    @GetMapping(value = "/userDetail")
+    public String userInfo(HttpServletRequest request, Model model) throws Exception {
         log.info(this.getClass().getName()+".userInfo start!");
-
         int user_no = Integer.valueOf(CmmUtil.nvl(request.getParameter("bNo")));
         UserDTO pDTO = new UserDTO();
         pDTO.setUser_no(user_no);
 
+        UserDTO rDTO = adminService.getUserInfo(pDTO);
+        List<BoardDTO> rList = adminService.getUserBoard(pDTO);
 
+        model.addAttribute("rDTO",rDTO);
+        model.addAttribute("rList", rList);
 
         return "admin/userInfo";
     }
 
-
     @GetMapping(value = "/adminDeleteUser")
     public String deleteUser(HttpSession session, HttpServletRequest request, Model model) throws Exception {
         log.info(this.getClass().getName()+".adminDeleteUser start!");
-        int user_no = Integer.valueOf(CmmUtil.nvl(request.getParameter("user_no")));
+        int user_no = Integer.valueOf(CmmUtil.nvl(request.getParameter("bNo")));
         UserDTO pDTO = new UserDTO();
         pDTO.setUser_no(user_no);
 
@@ -69,7 +71,33 @@ public class AdminController {
         model.addAttribute("msg", "회원삭제가 완료되었습니다");
         log.info(this.getClass().getName()+".adminDeleteUser end!");
 
-        return "/admin";
+        return "/admin/MsgToAdmin";
+    }
+
+    @GetMapping(value = "/userBoardDetail")
+    public String userBoardDetail(HttpServletRequest request, Model model) throws Exception {
+        log.info(request.getParameter("bNo"));
+        int user_no = Integer.valueOf(CmmUtil.nvl(request.getParameter("bNo")));
+        BoardDTO pDTO = new BoardDTO();
+        pDTO.setBoard_no(user_no);
+
+        BoardDTO rDTO = adminService.userBoardDetail(pDTO);
+
+        model.addAttribute("rDTO", rDTO);
+
+        return "/admin/userBoardDetail";
+    }
+
+    @GetMapping(value = "/userBoardDelete")
+    public String userBoardDelete(HttpServletRequest request, Model model)throws Exception{
+        log.info(CmmUtil.nvl(request.getParameter("bNo")));
+        int board_no = Integer.valueOf(CmmUtil.nvl(request.getParameter("bNo")));
+        BoardDTO pDTO = new BoardDTO();
+        pDTO.setBoard_no(board_no);
+        adminService.boardDelete(pDTO);
+        model.addAttribute("msg","글이 삭제되었습니다.");
+
+        return "/admin/MsgToAdmin";
     }
 
     @PostMapping(value= "/admin/pwCheck")
@@ -99,15 +127,17 @@ public class AdminController {
     }
 
     @PostMapping(value = "/admin/chgName")
-    public String chgName(HttpServletRequest request) throws Exception {
+    public String chgName(HttpServletRequest request, Model model, HttpSession session) throws Exception {
         String user_name = request.getParameter("user_name");
         int user_no = Integer.valueOf(request.getParameter("user_no"));
         UserDTO pDTO = new UserDTO();
         pDTO.setUser_name(user_name);
         pDTO.setUser_no(user_no);
         adminService.chgName(pDTO);
+        session.invalidate();
+        model.addAttribute("msg","닉네임이 변경되었습니다. 다시 로그인 해주시기 바랍니다.");
 
-        return "/myPage";
+        return "/signUp/MsgToLogin";
 
     }
 
@@ -125,7 +155,7 @@ public class AdminController {
 
         String msg = "비밀번호가 변경되었습니다. 다시 로그인 해주세요";
         model.addAttribute("msg",msg);
-        return "/signUp/MsgToMain";
+        return "/signUp/MsgToLogin";
 
     }
 

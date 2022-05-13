@@ -26,10 +26,13 @@ public class WeatherService implements IWeatherService {
         }
 
     @Override
-    public List<WeatherDTO> getCoordinate(WeatherDTO pDTO)
+    public WeatherDTO getCoordinate(WeatherDTO pDTO)
     {
         log.info(this.getClass().getName() + ".getCoordinate start");
 
-        return this.weatherMapper.selectCoordinate(pDTO);
+        WeatherDTO rDTO = weatherMapper.selectCoordinate(pDTO);
+
+        log.info(this.getClass().getName()+".getCoordinate end!");
+        return rDTO;
     }
 }

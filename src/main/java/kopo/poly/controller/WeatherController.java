@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,20 +40,24 @@ public class WeatherController {
         log.info(String.valueOf(params));
         log.info(this.getClass().getName() + ".getArea start");
 
-        return this.weatherService.getArea(params);
+        return weatherService.getArea(params);
 
     }
 
     @PostMapping(value = "/getCoordinate")
-    public List<WeatherDTO> getCoordinate(HttpServletRequest request) throws Exception {
+    @ResponseBody
+    public HashMap<String, String> getCoordinate(HttpServletRequest request) throws Exception {
         log.info(this.getClass().getName() + ".getCoordinate start");
         WeatherDTO pDTO = new WeatherDTO();
         String areacode = CmmUtil.nvl(request.getParameter("AR"));
         log.info(areacode);
         pDTO.setAreacode(areacode);
 
-        return this.weatherService.getCoordinate(pDTO);
-       
+        WeatherDTO rDTO = weatherService.getCoordinate(pDTO);
+        HashMap<String, String> rMap =  new HashMap<>();
+        rMap.put("gridX", rDTO.getGridx());
+        rMap.put("gridY", rDTO.getGridy());
+        return rMap;
 
     }
 

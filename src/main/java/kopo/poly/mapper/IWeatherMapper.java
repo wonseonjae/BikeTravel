@@ -10,5 +10,5 @@ import java.util.Map;
 public interface IWeatherMapper {
     List<WeatherDTO> selectArea(Map<String, String> params);
 
-    List<WeatherDTO> selectCoordinate(WeatherDTO pDTO);
+    WeatherDTO selectCoordinate(WeatherDTO pDTO);
 }

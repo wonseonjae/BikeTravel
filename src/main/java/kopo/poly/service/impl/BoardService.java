@@ -1,19 +1,16 @@
 package kopo.poly.service.impl;
 
 
-import kopo.poly.controller.Criteria;
 import kopo.poly.dto.BoardDTO;
+import kopo.poly.dto.Criteria;
 import kopo.poly.mapper.IBoardMapper;
-import kopo.poly.util.BoardPager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -27,6 +24,7 @@ public class BoardService {
     @Autowired
     IBoardMapper iBoardMapper;
 
+    //게시글 등록
    public void Upload(BoardDTO pDTO){
        log.info(this.getClass().getName() + ".upload start");
        log.info(String.valueOf(pDTO));
@@ -36,6 +34,7 @@ public class BoardService {
 
    }
 
+   //게시글 목록 호출
    public List<BoardDTO> getBoardList() throws Exception {
        log.info(this.getClass().getName() + ".getBoardList start");
        log.info(this.getClass().getName() + ".getBoardList end");
@@ -43,6 +42,7 @@ public class BoardService {
 
    }
 
+   //게시글 코스로 검색하기
     public List<BoardDTO> getBoardListByCourse(BoardDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + ".getBoardList start");
         log.info(this.getClass().getName() + ".getBoardList end");
@@ -50,11 +50,18 @@ public class BoardService {
         return iBoardMapper.getBoardListByCourse(pDTO);
     }
 
-    public int totalCount() throws Exception {
-       return iBoardMapper.totalCount();
+    //게시글 총갯수 조회
+    public int totalCount(Criteria cri) throws Exception {
+
+       return iBoardMapper.totalCount(cri);
     }
 
+    public int totalCountByCourse(BoardDTO pDTO) throws Exception {
 
+        return iBoardMapper.totalCountByCourse(pDTO);
+    }
+
+    //게시판 상세보기
     public BoardDTO getBoardInfo(BoardDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".getBoardInfo start!");
@@ -64,14 +71,34 @@ public class BoardService {
 
     }
 
+    //게시글 수정
     public void boardUpdate(BoardDTO pDTO) throws Exception{
        log.info(this.getClass().getName() + ".boardUpdate start!");
        pDTO.setRegdate(localTime);
        iBoardMapper.boardUpdate(pDTO);
     }
 
+    //게시글 삭제
     public void boardDelete(BoardDTO pDTO) throws Exception{
        log.info(this.getClass().getName()+".boardDelete start!");
        iBoardMapper.boardDelete(pDTO);
     }
+
+    public List<BoardDTO> getListPaging(int pNo) {
+       Criteria cri = new Criteria();
+       cri.setPageNum(pNo);
+        return iBoardMapper.getListPaging(cri);
+    }
+
+    public List<BoardDTO> getListPagingByCourse(int pNo, BoardDTO pDTO) {
+        HashMap<String, Object> hMap = new HashMap();
+        Criteria cri = new Criteria();
+        cri.setPageNum(pNo);
+        hMap.put("skip", cri.getSkip());
+        hMap.put("amount", cri.getAmount());
+        hMap.put("coursename", pDTO.getCoursename());
+
+        return iBoardMapper.getListPagingByCourse(hMap);
+    }
+
 }

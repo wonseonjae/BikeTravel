@@ -14,12 +14,18 @@
       <% if(session.getAttribute("user") == null){%>
    <li class="nav-item"><a class="nav-link" href="/LoginPage">로그인</a></li>
       <%}%>
+
    <!--<form  required oninput="Show()">-->
       <% if(session.getAttribute("user") != null){%>
    <li class="nav-item"><a class="nav-link" href="/myPage">마이페이지</a></li>
    <li class="nav-item"><a class="nav-link" href="/logOut">로그아웃</a></li>
    <li class="nav-item"><a class="nav-link" href="/admin">관리자 페이지</a></li>
       <%}%>
+
+</ul>
+<ul>
+   <li><a href="/intro/courseList">코스 조회</a></li>
+   <li><a href="/board/boardList">후기게시판</a></li>
 </ul>
 
 <form>

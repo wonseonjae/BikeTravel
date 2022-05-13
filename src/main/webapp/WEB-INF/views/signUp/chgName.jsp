@@ -11,6 +11,7 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
     <title>닉네임 변경</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         function doOnload(f) {
@@ -20,12 +21,15 @@
                 return false;
             }
 
-            if(f.nameChkYN.value == ""){
+            if(f.nameChkYN.value == "" || f.nameChkYN.value == "N"){
                 alert("닉네임 중복체크를 해주시기 바랍니다.");
                 f.user_name.focus();
                 return false;
             }
 
+        }
+        function keyPress() {
+            document.getElementById('nameChkYN').value = "N";
         }
         function nameCheck() {
             $.ajax({
@@ -56,9 +60,10 @@
         <div class="form-group">
             <input type="text" style="width:400px;height:35px;" id="user_name" name="user_name" placeholder="새로 사용하고 싶으신 닉네임을 입력해주세요" >
             <input type="hidden" id="nameChkYN" name="nameChkYN">
-            <input type="hidden" id="user_no" name="user_no" value="<%=userDTO.getUser_no()%>">
+            <input type="hidden" id="user_no" name="user_no" onkeypress="" value="<%=userDTO.getUser_no()%>">
+            <input type="button" value="중복체크" onclick="nameCheck()">
         </div>
-        <input type="button" onclick="nameCheck()" class="btn btn-primary" value="중복체크">
+
     </div>
         <input type="submit" class="btn btn-primary" value="변경">
 

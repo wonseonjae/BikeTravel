@@ -11,7 +11,32 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js" integrity="sha256-xH4q8N0pEzrZMaRmd7gQVcTZiFei+HfRTBPJ1OGXC0k=" crossorigin="anonymous"></script>
     <script>
-        /*<![CDATA[*/
+        function getWeather() {
+        let xhr = new XMLHttpRequest();
+        let gridX = document.getElementById("coordX").value;
+        let gridY = document.getElementById("coordY").value;
+        let day = document.getElementById("datepicker").value;
+        let time = document.getElementById("time").value;
+        let url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'; /*URL*/
+        let queryParams = '?' + encodeURIComponent('serviceKey') + '='+'7EpF3TCkgMENfaz3eaLHbldfYrPuDMZRi2IEbYu1fGqnoUxT5ZB6xm28C3Xv6TB2IegtMlKzIlLLNExhFq1FsQ%3D%3D'; /*Service Key*/
+        queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /**/
+        queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('1000'); /**/
+        queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('JSON'); /**/
+        queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent(day); /**/
+        queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent('0600'); /**/
+        queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent(gridX); /**/
+        queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent(gridY); /**/
+        xhr.open('GET', url + queryParams);
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                alert('Status: '+this.status+'nHeaders: '+JSON.stringify(this.getAllResponseHeaders())+'nBody: '+this.responseText);
+            }
+        };
+
+        xhr.send();
+        }
+    </script>
+    <script>
         window.onload = function() {
             $('#datepicker').datepicker({
                 showOn: 'button',
@@ -66,17 +91,19 @@
                 data: {AR : areacode},
                 dataType: "JSON",
                 method: "POST",
-                success : function (res){
-                    if (res != ''){
-                        res.forEach(function () {
-                            $('#step1').append('<option value="'+city.areacode+'">'+city.step1+'</option>')
-                        });
+                success : function (data){
+                    let gridX = data.gridX;
+                    let gridY = data.gridY;
+                    $('input[name=coordX]').attr('value',gridX);
+                    $('input[name=coordY]').attr('value',gridY);
+
+
                     }
 
                 }
 
 
-            })
+            )
         }
 
         function loadArea(type, element) {
@@ -129,12 +156,8 @@
             <select id="step3">
                 <option id="town" value="">읍/면/동</option>
             </select>
-            <select id="CoordinateX" class="emptyCheck" title="시/도">
-                <option id="coorX" value="">시/도</option>
-            </select>
-            <select id="CoordinateY" class="emptyCheck" title="시/도">
-                <option id="coorY" value="">시/도</option>
-            </select>
+            <input type="hidden" id="coordX" name="coordX">
+            <input type="hidden" id="coordY" name="coordY">
             <span>날짜 선택: <input type="text" id="datepicker" disabled="disabled" class="emptyCheck" title="날짜"></span>
             <select id="time" title="시간" class="form-control">
                 <option value="" selected>시간</option>
@@ -150,7 +173,7 @@
                 </c:forEach>
             </select>
 
-            <button type="button" class="btn btn-primary waves-effect waves-light" th:onclick="getWeather()">
+            <button type="button" class="btn btn-primary waves-effect waves-light" onclick="getWeather()">
                 <span>실행</span>
             </button>
 

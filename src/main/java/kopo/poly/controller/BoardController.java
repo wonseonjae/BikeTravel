@@ -1,6 +1,8 @@
 package kopo.poly.controller;
 
 import kopo.poly.dto.BoardDTO;
+import kopo.poly.dto.Criteria;
+import kopo.poly.dto.PageMakeDTO;
 import kopo.poly.service.impl.BoardService;
 import kopo.poly.service.impl.S3Service;
 import kopo.poly.util.CmmUtil;
@@ -267,6 +269,77 @@ public class BoardController {
         model.addAttribute("msg",msg);
         return "/board/MsgToList";
 
+
+    }
+
+    @GetMapping("/board/list")
+    public void boardListGET(HttpServletRequest request, Model model, Criteria cri) throws Exception {
+        int pNo = 1;
+        if (request.getParameter("pNo") != null) {
+            pNo = Integer.valueOf(request.getParameter("pNo"));
+
+            log.info("cri : " + cri);
+
+            model.addAttribute("list", boardService.getListPaging(pNo));
+
+            int total = boardService.totalCount(cri);
+
+            PageMakeDTO pageMake = new PageMakeDTO(cri, total);
+
+            model.addAttribute("pageMaker", pageMake);
+
+        }
+        log.info("boardListGET");
+
+        log.info("cri : " + cri);
+
+        model.addAttribute("list", boardService.getListPaging(pNo));
+
+        int total = boardService.totalCount(cri);
+
+        PageMakeDTO pageMake = new PageMakeDTO(cri, total);
+
+        model.addAttribute("pageMaker", pageMake);
+
+    }
+
+    @GetMapping("/board/listByCourse")
+    public void boardListByCourseName(HttpServletRequest request, Model model, Criteria cri) throws Exception {
+        int pNo = 1;
+        String courseDiv = CmmUtil.nvl(request.getParameter("s1"));
+        String courseName = CmmUtil.nvl(request.getParameter("s2"));
+        log.info(courseName);
+        BoardDTO pDTO = new BoardDTO();
+        pDTO.setCoursename(courseName);
+
+        if (request.getParameter("pNo") != null) {
+            pNo = Integer.valueOf(request.getParameter("pNo"));
+
+            log.info("cri : " + cri);
+
+            model.addAttribute("list", boardService.getListPagingByCourse(pNo, pDTO));
+            model.addAttribute("s1",courseDiv);
+            model.addAttribute("s2",courseName);
+
+            int total = boardService.totalCountByCourse(pDTO);
+            cri.setPageNum(pNo);
+            PageMakeDTO pageMake = new PageMakeDTO(cri, total);
+
+            model.addAttribute("pageMaker", pageMake);
+
+        }
+
+        log.info("cri : " + cri);
+
+        model.addAttribute("list", boardService.getListPagingByCourse(pNo, pDTO));
+
+        int total = boardService.totalCountByCourse(pDTO);
+
+        PageMakeDTO pageMake = new PageMakeDTO(cri, total);
+
+        model.addAttribute("pageMaker", pageMake);
+        model.addAttribute("s1",courseDiv);
+        model.addAttribute("s2",courseName);
 
     }
 

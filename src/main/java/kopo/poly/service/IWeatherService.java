@@ -8,5 +8,5 @@ import java.util.Map;
 public interface IWeatherService {
     List<WeatherDTO> getArea(Map<String, String> params);
 
-    List<WeatherDTO> getCoordinate(WeatherDTO pDTO);
+    WeatherDTO getCoordinate(WeatherDTO pDTO);
 }

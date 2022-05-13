@@ -23,8 +23,8 @@ public class WeatherDTO {
     private String baseTime;
 
     // 예보지점 X좌표
-    private String nx;
+    private String gridx;
 
     // 예보지점 Y좌표
-    private String ny;
+    private String gridy;
 }

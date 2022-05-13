@@ -17,10 +17,10 @@ public interface IAdminService {
     List<BoardDTO> getUserBoard(UserDTO pDTO);
 
     //회원 작성글 상세보기
-    BoardDTO getBoardInfo(UserDTO pDTO) throws Exception;
+    BoardDTO userBoardDetail(BoardDTO pDTO) throws Exception;
 
     //회원 작성글 삭제
-    void boardDelete(UserDTO pDTO) throws Exception;
+    void boardDelete(BoardDTO pDTO) throws Exception;
 
     //회원 정보 삭제
     void deleteUser(UserDTO pDTO) throws Exception;
