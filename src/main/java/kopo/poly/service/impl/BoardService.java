@@ -2,6 +2,7 @@ package kopo.poly.service.impl;
 
 
 import kopo.poly.dto.BoardDTO;
+import kopo.poly.dto.CommentDTO;
 import kopo.poly.dto.Criteria;
 import kopo.poly.mapper.IBoardMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -99,6 +100,28 @@ public class BoardService {
         hMap.put("coursename", pDTO.getCoursename());
 
         return iBoardMapper.getListPagingByCourse(hMap);
+    }
+
+    public int insertComment(CommentDTO pDTO) throws Exception {
+       int res = 0;
+       pDTO.setRegdate(localTime);
+       iBoardMapper.insertComment(pDTO);
+       res = 1;
+       return res;
+    }
+
+    public List<CommentDTO> getComment(CommentDTO pDTO) {
+
+        return iBoardMapper.getComment(pDTO);
+    }
+
+    public int getRepCnt(CommentDTO pDTO) {
+       return iBoardMapper.getRepCnt(pDTO);
+    }
+
+    public int repDelete(CommentDTO pDTO) {
+       iBoardMapper.repDelete(pDTO);
+       return 0;
     }
 
 }

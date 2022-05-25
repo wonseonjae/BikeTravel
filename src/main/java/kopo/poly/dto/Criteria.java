@@ -22,6 +22,7 @@ public class Criteria {
     /* 검색 타입 배열 */
     private String[] typeArr;
 
+
     /* 기본 생성자 -> 기봅 세팅 : pageNum = 1, amount = 10 */
     public Criteria() {
         this(1,10);

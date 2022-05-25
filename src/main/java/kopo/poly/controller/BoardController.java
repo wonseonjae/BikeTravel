@@ -1,6 +1,6 @@
 package kopo.poly.controller;
-
 import kopo.poly.dto.BoardDTO;
+import kopo.poly.dto.CommentDTO;
 import kopo.poly.dto.Criteria;
 import kopo.poly.dto.PageMakeDTO;
 import kopo.poly.service.impl.BoardService;
@@ -13,13 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,9 +63,8 @@ public class BoardController {
             boardService.Upload(pDTO);
             String msg = "글이 작성되었습니다.";
             model.addAttribute("msg", msg);
-            return "/board/MsgToList";
         }else{
-            Integer user_no = Integer.valueOf(CmmUtil.nvl(request.getParameter("user_no")));
+            int user_no = Integer.parseInt(CmmUtil.nvl(request.getParameter("user_no")));
             BoardDTO pDTO = new BoardDTO();
             pDTO.setTitle(title);
             pDTO.setCoursename(coursename);
@@ -75,65 +73,43 @@ public class BoardController {
             boardService.Upload(pDTO);
             String msg = "글이 작성되었습니다.";
             model.addAttribute("msg", msg);
-            return "/board/MsgToList";
 
         }
+        return "/board/MsgToList";
 
     }
+    @PostMapping("/commentReg")
+    public String commentReg(HttpServletRequest request, Model model) throws Exception {
+        int bNo = Integer.parseInt(CmmUtil.nvl(request.getParameter("board_no")));
+        String comment =CmmUtil.nvl(request.getParameter("comment"));
+        int uNo = Integer.parseInt(CmmUtil.nvl(request.getParameter("user_no")));
+        CommentDTO pDTO = new CommentDTO();
+        pDTO.setUser_no(uNo);
+        pDTO.setBoard_no(bNo);
+        pDTO.setComment_text(comment);
+        boardService.insertComment(pDTO);
+        model.addAttribute("bNo", String.valueOf(bNo));
+        model.addAttribute("msg","댓글이 등록되었습니다.");
 
-    @GetMapping("/board/boardList")
-    public String BoardList(Model model) throws Exception {
-        log.info(this.getClass().getName() + ".BoardList start!");
-
-        // 공지사항 리스트 가져오기
-        List<BoardDTO> rList = boardService.getBoardList();
-
-        if (rList == null) {
-            rList = new ArrayList<>();
-
-        }
-
-        // 조회된 리스트 결과값 넣어주기
-        model.addAttribute("rList", rList);
-
-        log.info(String.valueOf(rList));
-
-        // 로그 찍기(추후 찍은 로그를 통해 이 함수 호출이 끝났는지 파악하기 용이하다.)
-        log.info(this.getClass().getName() + ".BoardList end!");
-
-        // 함수 처리가 끝나고 보여줄 JSP 파일명(/WEB-INF/view/notice/NoticeList.jsp)
-        return "/board/boardList";
+        return "/board/MsgToBoardInfo";
     }
 
-    @GetMapping("/board/boardListCourse")
-    public String BoardListByCourse(HttpServletRequest request, ModelMap model) throws Exception {
-        log.info(this.getClass().getName() + ".BoardListCourse start!");
-        String CourseName = CmmUtil.nvl(request.getParameter("s2"));
-        log.info(CourseName);
-        BoardDTO pDTO = new BoardDTO();
-        pDTO.setCoursename(CourseName);
+    @GetMapping(value = "repDelete")
+    public String repDelete(HttpServletRequest request, Model model) {
 
-        // 공지사항 리스트 가져오기
-        List<BoardDTO> rList = boardService.getBoardListByCourse(pDTO);
-
-        if (rList == null) {
-            rList = new ArrayList<>();
-
-        }
-
-        // 조회된 리스트 결과값 넣어주기
-        model.addAttribute("rList", rList);
-
-        log.info(String.valueOf(rList));
-
-        // 로그 찍기(추후 찍은 로그를 통해 이 함수 호출이 끝났는지 파악하기 용이하다.)
-        log.info(this.getClass().getName() + ".BoardListByCourse end!");
-
-        // 함수 처리가 끝나고 보여줄 JSP 파일명(/WEB-INF/view/notice/NoticeList.jsp)
-        return "/board/boardListCourse";
+        int cNo = Integer.parseInt(request.getParameter("cNo"));
+        String bNo = CmmUtil.nvl(request.getParameter("bNo"));
+        log.info(String.valueOf(cNo));
+        CommentDTO pDTO = new CommentDTO();
+        pDTO.setComment_no(cNo);
+        int res = boardService.repDelete(pDTO);
+        model.addAttribute("msg", "댓글이 삭제되었습니다");
+        model.addAttribute("bNo", bNo);
+        return "/board/MsgToBoardInfo";
     }
+
     @GetMapping(value = "board/boardInfo")
-    public String NoticeInfo(HttpServletRequest request, ModelMap model) {
+    public String NoticeInfo(HttpServletRequest request, ModelMap model, Criteria cri) {
 
         log.info(this.getClass().getName() + ".boardInfo start!");
 
@@ -161,23 +137,22 @@ public class BoardController {
             // 공지사항 상세정보 가져오기
             BoardDTO rDTO = boardService.getBoardInfo(pDTO);
 
-            if (rDTO == null) {
-                rDTO = new BoardDTO();
-
-            }
+            CommentDTO cDTO = new CommentDTO();
+            cDTO.setBoard_no(Integer.parseInt(bNo));
+            List<CommentDTO> rList = boardService.getComment(cDTO);
+            int res = boardService.getRepCnt(cDTO);
 
             log.info("getBoardInfo success");
 
             // 조회된 리스트 결과값 넣어주기
             model.addAttribute("rDTO", rDTO);
-
+            model.addAttribute("rList", rList);
+            model.addAttribute("res", res);
 
         } catch (Exception e) {
-
             // 저장이 실패되면 사용자에게 보여줄 메시지
             log.info(e.toString());
             e.printStackTrace();
-
         } finally {
             log.info(this.getClass().getName() + ".boardInfo end!");
 

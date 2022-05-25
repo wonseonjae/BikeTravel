@@ -31,13 +31,8 @@ public class UserController {
         return "/main";
     }
 
-    //테스트
-    @CrossOrigin("*")
-    @GetMapping("/test")
-    public String Test() {
-        log.info(this.getClass().getName() + " MainPage");
-        return "/test";
-    }
+
+
 
     //회원가입
     @GetMapping("/signUp")

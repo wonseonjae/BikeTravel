@@ -11,4 +11,6 @@ public interface IWeatherMapper {
     List<WeatherDTO> selectArea(Map<String, String> params);
 
     WeatherDTO selectCoordinate(WeatherDTO pDTO);
+
+    WeatherDTO getArea(WeatherDTO pDTO);
 }

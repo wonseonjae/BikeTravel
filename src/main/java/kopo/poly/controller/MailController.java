@@ -71,11 +71,13 @@ public class MailController {
 
         if(loginService.findPwCheck(pDTO)==0) {
             model.addAttribute("msg", "잘못된 이메일 혹은 아이디 입니다.");
-            return "/signUp/find";
+            return "/signUp/findPw";
         }else {
             loginService.resetPw(pDTO);
             log.info(this.getClass().getName() + ".sendEmail end");
+            model.addAttribute("msg","비밀번호를 재발급하였습니다. 로그인 후 변경해주세요");
+            return "/signUp/MsgToLogin";
         }
-        return "/signUp/Login";
+
     }
 }

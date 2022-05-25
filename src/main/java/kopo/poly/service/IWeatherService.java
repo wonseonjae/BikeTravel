@@ -9,4 +9,6 @@ public interface IWeatherService {
     List<WeatherDTO> getArea(Map<String, String> params);
 
     WeatherDTO getCoordinate(WeatherDTO pDTO);
+
+    WeatherDTO getArea(WeatherDTO pDTO);
 }

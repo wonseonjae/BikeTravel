@@ -49,4 +49,12 @@
 		WHERE
 			AREACODE = #{areacode}
 	</select>
+	<select id="getArea" resultType="WeatherDTO" parameterType="WeatherDTO">
+		select
+			STEP1, STEP2, STEP3
+		from
+			TB_WEATHER_AREA
+		where
+			AREACODE= #{areacode}
+	</select>
 </mapper>

@@ -35,4 +35,9 @@ public class WeatherService implements IWeatherService {
         log.info(this.getClass().getName()+".getCoordinate end!");
         return rDTO;
     }
+
+    @Override
+    public WeatherDTO getArea(WeatherDTO pDTO) {
+        return weatherMapper.getArea(pDTO);
+    }
 }

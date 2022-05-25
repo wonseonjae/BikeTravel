@@ -1,6 +1,7 @@
 package kopo.poly.mapper;
 
 import kopo.poly.dto.BoardDTO;
+import kopo.poly.dto.CommentDTO;
 import kopo.poly.dto.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -30,4 +31,12 @@ public interface IBoardMapper {
     int boardUpdate(BoardDTO pDTO) throws Exception;
 
     int boardDelete(BoardDTO pDTO) throws Exception;
+
+    int insertComment(CommentDTO pDTO) throws Exception;
+
+    List<CommentDTO> getComment(CommentDTO pDTO);
+
+    int getRepCnt(CommentDTO pDTO);
+
+    void repDelete(CommentDTO pDTO);
 }

@@ -4,9 +4,13 @@
 <%@ page import="kopo.poly.dto.BoardDTO" %>
 <%@ page import="kopo.poly.util.CmmUtil" %>
 <%@ page import="kopo.poly.dto.UserDTO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="kopo.poly.dto.CommentDTO" %>
+<%@ page import="org.apache.catalina.User" %>
 <%
-
 	BoardDTO rDTO = (BoardDTO) request.getAttribute("rDTO");
+	List<CommentDTO> rList= (List<CommentDTO>) request.getAttribute("rList");
+	int res = (Integer) request.getAttribute("res");
 
 //공지글 정보를 못불러왔다면, 객체 생성
 	if (rDTO == null) {
@@ -34,6 +38,14 @@
 		}
 	}
 
+	int rep = 0;
+	if (session.getAttribute("user")!=null) {
+		UserDTO uDTO = (UserDTO) session.getAttribute("user");
+		rep = uDTO.getUser_no();
+
+
+	}
+
 
 
 %>
@@ -42,9 +54,17 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 	<title>게시판 글보기</title>
+
 	<script type="text/javascript">
 
-		//수정하기
+		//댓글쓰기
+		function doReply() {
+			if ("<%=edit%>" == 3) {
+				alert("로그인 하시길 바랍니다.");
+				return false;
+			}
+
+		}
 		function doEdit() {
 			if ("<%=edit%>" == 2) {
 				location.href = "/board/boardEditInfo?nSeq=<%=CmmUtil.nvl(String.valueOf(rDTO.getBoard_no()))%>";
@@ -72,6 +92,18 @@
 
 			} else {
 				alert("본인이 작성한 글만 삭제 가능합니다.");
+
+			}
+		}
+
+		function repDelete(cNo,uNo) {
+			if ("<%=rep%>" == uNo ){
+				if (confirm("작성한 댓글을 삭제하시겠습니까?")) {
+					location.href = "/repDelete?cNo="+cNo+"&bNo="+<%=rDTO.getBoard_no()%>;
+				}
+			}
+			 else {
+				alert("본인이 작성한 댓글만 삭제 가능합니다.");
 
 			}
 		}
@@ -125,5 +157,49 @@
 		</td>
 	</tr>
 </table>
+<form method="post" action="/commentReg" onsubmit="return doReply(this)">
+<hr>
+	<h3>댓글 작성</h3></hr>
+	<input type="text" id = "comment" name="comment" placeholder="50자 이내로 작성해 주세요">
+	<input type="hidden" id="board_no" name="board_no" value="<%=rDTO.getBoard_no()%>">
+	<%
+		if (session.getAttribute("user") != null) {
+			UserDTO uDTO = (UserDTO) session.getAttribute("user");
+
+			if (uDTO == null) {
+				uDTO = new UserDTO();
+			}
+
+	%>
+	<input type="hidden" id="user_no" name="user_no" value="<%=uDTO.getUser_no()%>">
+	<%}%>
+	<input type="submit" value="등록">
+</div>
+</form>
+<div >
+	<h3>댓글 목록[<%=res%>]</h3>
+	<%
+		for (int i = 0; i < rList.size(); i++) {
+			CommentDTO cDTO = rList.get(i);
+
+			if (cDTO == null) {
+				cDTO = new CommentDTO();
+			}
+
+	%>
+	<div>
+		<a><%=CmmUtil.nvl(cDTO.getUser_name()) %></a>
+		<a><%=CmmUtil.nvl(cDTO.getRegdate()) %></a>
+		<a href="javascript:repDelete('<%=cDTO.getComment_no()%>','<%=cDTO.getUser_no()%>')">삭제</a>
+
+	</div>
+	<div>
+		<a><%=CmmUtil.nvl(cDTO.getComment_text()) %></a>
+	</div>
+	<%
+		}
+	%>
+</div>
+
 </body>
 </html>

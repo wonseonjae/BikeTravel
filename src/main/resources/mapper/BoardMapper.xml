@@ -58,7 +58,7 @@
 		select R.BOARD_NO, R.COURSENAME, R.TITLE, R.CONTENTS, R.REGDATE, U.USER_NAME, R.IMGLINK
 		from REVIEWBOARD R, USER_INFO U
 		WHERE U.USER_NO = R.USER_NO
-		order by BOARD_NO desc) as T1
+		order by BOARD_NO asc) as T1
 		limit #{skip},#{amount}
 
 	</select>
@@ -69,10 +69,28 @@
 						  select R.BOARD_NO, R.COURSENAME, R.TITLE, R.CONTENTS, R.REGDATE, U.USER_NAME, R.IMGLINK
 						  from REVIEWBOARD R, USER_INFO U
 						  WHERE U.USER_NO = R.USER_NO and R.COURSENAME=#{coursename}
-						  order by BOARD_NO desc) as T1
+						  order by BOARD_NO asc) as T1
 						  limit #{skip},#{amount}
 
 	</select>
 
+	<insert id="insertComment" parameterType="CommentDTO">
+		<selectKey keyProperty="comment_no" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(COMMENT.COMMENT_NO+1),1) FROM COMMENT
+		</selectKey>
+		insert into COMMENT(COMMENT_NO, COMMENT_TEXT, REGDATE, BOARD_NO, USER_NO) values (#{comment_no}, #{comment_text}, #{regdate}, #{board_no}, #{user_no})
+	</insert>
 
+	<select id="getComment" parameterType="CommentDTO" resultType="CommentDTO">
+		   select C.COMMENT_NO, C.BOARD_NO, C.cOMMENT_TEXT, C.REGDATE, C.USER_NO, U.USER_NAME
+		   from COMMENT C, USER_INFO U
+		   WHERE C.BOARD_NO=#{board_no} and C.USER_NO = U.USER_NO
+	       order by C.COMMENT_NO asc
+	</select>
+	<select id="getRepCnt" parameterType="CommentDTO" resultType="int">
+		select count(*) from COMMENT where BOARD_NO=#{board_no}
+	</select>
+	<delete id="repDelete" parameterType="CommentDTO">
+		delete from COMMENT where COMMENT_NO=#{comment_no}
+	</delete>
 </mapper>

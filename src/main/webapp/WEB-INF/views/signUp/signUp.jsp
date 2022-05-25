@@ -8,6 +8,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
     <title>회원가입</title>
     <script>
+        function mailCheck() {
+            let i = document.join.mail3.selectedIndex // 선택항목의 인덱스 번호
+            let domain = document.join.mail3.options[i].value // 선택항목 value
+            document.join.user_maildomain.value=domain
+        }
         function doSubmit(f){
             if(f.user_id.value == ""){
                 alert("아이디를 입력해주시기 바랍니다.");
@@ -257,8 +262,7 @@
 
                 <input type="text" style="width:500px;height:35px;" id="user_maildomain" name="user_maildomain" placeholder="도메인을 선택해주세요" readonly>
                 <input type="hidden" class="form-control" name="mailChkYN" id="mailChkYN">
-
-                    <select style="width:120px;height:35px;" name="mail3" onChange="mailcheck()">
+                    <select style="width:120px;height:35px;" name="mail3" onChange="mailCheck()">
                     <option value="gmail.com" >gmail.com</option>
                     <option value="naver.com">naver.com</option>
                 </select>

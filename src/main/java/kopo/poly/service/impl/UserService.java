@@ -103,7 +103,7 @@ public class UserService implements IUserService {
         String user_maildomain = CmmUtil.nvl(pDTO.getUser_maildomain());
         log.info(user_mailid+"@"+user_maildomain);
 
-        UserDTO rDTO = userMapper.nameCheck(pDTO);
+        UserDTO rDTO = userMapper.mailCheck(pDTO);
 
         if (rDTO == null) {
             rDTO = new UserDTO();
@@ -117,7 +117,7 @@ public class UserService implements IUserService {
         }
 
         log.info(String.valueOf(res));
-        log.info(this.getClass().getName() + ".idCheck end");
+        log.info(this.getClass().getName() + ".mailCheck end");
         return res;
     }
 
