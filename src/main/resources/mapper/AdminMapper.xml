@@ -4,8 +4,54 @@
 <!-- JAVA와 연결할 Mapper 파일 설정 -->
 <mapper namespace="kopo.poly.mapper.IAdminMapper">
 	<!--관리자 유저목록 호출-->
-	<select id="getUserList" parameterType="UserDTO" resultType="UserDTO">
-		SELECT * from USER_INFO
+	<select id="getUserPaging" resultType="UserDTO">
+		select * from (
+						  select *
+						  from USER_INFO
+						  order by USER_NO asc) as T1
+		limit #{skip},#{amount}
+	</select>
+
+	<!--관리자 공지목록 호출-->
+	<select id="getNoticePaging" resultType="NoticeDTO">
+		select * from (
+						  select *
+						  from NOTICE
+						  order by NOTICE_NO asc) as T1
+		limit #{skip},#{amount}
+	</select>
+
+	<!-- 공지목록 페이징처리 -->
+	<select id="NoticeTotalCount" resultType="int">
+		select count(*) from NOTICE
+	</select>
+
+	<!-- 회원 목록 페이징처리 -->
+	<select id="userTotalCount" resultType="int">
+		select count(*) from USER_INFO
+	</select>
+
+	<!--관리자 공지작성-->
+	<insert id="insertNotice" parameterType="NoticeDTO" >
+		<selectKey keyProperty="notice_no" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(NOTICE_NO+1),1) FROM NOTICE
+		</selectKey>
+		insert into NOTICE values (#{notice_no},#{title},#{contents},#{regdate},#{adminname})
+	</insert>
+
+	<!--공지 상세보기-->
+	<select id="noticeDetail" resultType="NoticeDTO">
+		select * from NOTICE where NOTICE_NO=#{notice_no}
+	</select>
+
+	<!--관리자 공지 삭제-->
+	<delete id="deleteNotice" parameterType="NoticeDTO">
+		delete from NOTICE where NOTICE_NO=#{notice_no}
+	</delete>
+
+	<!--관리자 동호회목록 호출-->
+	<select id="getClubList" resultType="ClubListDTO">
+		SELECT * from BIKECLUB
 	</select>
 
 	<!--관리자 유저정보 호출 -->

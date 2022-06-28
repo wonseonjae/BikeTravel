@@ -1,7 +1,6 @@
 package kopo.poly.service.impl;
 
-import kopo.poly.dto.BoardDTO;
-import kopo.poly.dto.UserDTO;
+import kopo.poly.dto.*;
 import kopo.poly.mapper.IAdminMapper;
 import kopo.poly.service.IAdminService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,20 +8,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
 @Service
 public class AdminService implements IAdminService {
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    Date time = new Date();
+    String localTime = format.format(time);
 
     @Autowired
     private IAdminMapper adminMapper;
 
-    @Transactional
     @Override
-    public List<UserDTO> getUserList() {
-        log.info(this.getClass().getName()+".getUserList start");
-        return adminMapper.getUserList();
+    public List<UserDTO> getUserPaging(int uNo) {
+        Criteria cri = new Criteria();
+        cri.setPageNum(uNo);
+        return adminMapper.getUserPaging(cri);
+    }
+
+    @Override
+    public int userTotalCount(Criteria cri) throws Exception {
+        return adminMapper.userTotalCount(cri);
+    }
+
+    @Override
+    public List<NoticeDTO> getNoticePaging(int uNo) {
+        Criteria cri = new Criteria();
+        cri.setPageNum(uNo);
+        return adminMapper.getNoticePaging(cri);
+    }
+
+    @Override
+    public int noticeTotalCount(Criteria cri) throws Exception {
+        return adminMapper.NoticeTotalCount(cri);
+    }
+
+    @Override
+    public int insertNotice(NoticeDTO pDTO) {
+        int res = 0;
+        pDTO.setRegdate(localTime);
+        adminMapper.insertNotice(pDTO);
+        res = 1;
+        return res;
+    }
+
+    @Override
+    public int deleteNotice(NoticeDTO pDTO) {
+        adminMapper.deleteNotice(pDTO);
+
+        return 0;
+    }
+
+    @Override
+    public NoticeDTO noticeDetail(NoticeDTO pDTO) {
+        return adminMapper.noticeDetail(pDTO);
     }
 
     @Override

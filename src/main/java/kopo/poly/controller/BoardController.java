@@ -1,8 +1,7 @@
 package kopo.poly.controller;
-import kopo.poly.dto.BoardDTO;
-import kopo.poly.dto.CommentDTO;
-import kopo.poly.dto.Criteria;
-import kopo.poly.dto.PageMakeDTO;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kopo.poly.dto.*;
 import kopo.poly.service.impl.BoardService;
 import kopo.poly.service.impl.S3Service;
 import kopo.poly.util.CmmUtil;
@@ -11,26 +10,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
 @Controller
 public class BoardController {
 
-    @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
 
-    @Autowired
-    private S3Service s3Service;
+    private final S3Service s3Service;
+
+    public BoardController(BoardService boardService, S3Service s3Service) {
+        this.boardService = boardService;
+        this.s3Service = s3Service;
+    }
 
 
     @GetMapping("/board/boardWrite")
@@ -48,7 +51,7 @@ public class BoardController {
             MultipartFile file = request.getFile("file");
             String imgPath = s3Service.upload(file);
             String imglink = "https://d1y3hanryj5vy8.cloudfront.net/" + imgPath;
-            Integer user_no = Integer.valueOf(CmmUtil.nvl(request.getParameter("user_no")));
+            Integer user_no = Integer.parseInt(request.getParameter("user_no"));
             log.info(title);
             log.info(coursename);
             log.info(contents);
@@ -64,7 +67,7 @@ public class BoardController {
             String msg = "글이 작성되었습니다.";
             model.addAttribute("msg", msg);
         }else{
-            int user_no = Integer.parseInt(CmmUtil.nvl(request.getParameter("user_no")));
+            int user_no = Integer.parseInt(request.getParameter("user_no"));
             BoardDTO pDTO = new BoardDTO();
             pDTO.setTitle(title);
             pDTO.setCoursename(coursename);
@@ -78,42 +81,57 @@ public class BoardController {
         return "/board/MsgToList";
 
     }
-    @PostMapping("/commentReg")
-    public String commentReg(HttpServletRequest request, Model model) throws Exception {
-        int bNo = Integer.parseInt(CmmUtil.nvl(request.getParameter("board_no")));
-        String comment =CmmUtil.nvl(request.getParameter("comment"));
-        int uNo = Integer.parseInt(CmmUtil.nvl(request.getParameter("user_no")));
-        CommentDTO pDTO = new CommentDTO();
-        pDTO.setUser_no(uNo);
-        pDTO.setBoard_no(bNo);
-        pDTO.setComment_text(comment);
-        boardService.insertComment(pDTO);
-        model.addAttribute("bNo", String.valueOf(bNo));
-        model.addAttribute("msg","댓글이 등록되었습니다.");
 
-        return "/board/MsgToBoardInfo";
+    @ResponseBody
+    @PostMapping("/commentReg")
+    public void commentReg(@RequestBody List<Map<String, Object>> params, HttpSession session) throws Exception {
+        /*ObjectMapper objectMapper = new ObjectMapper();
+        List<Map<String, Object>> param = objectMapper.convertValue(params, new TypeReference<List<Map<String, Object>>>(){});*/
+        UserDTO uDTO = (UserDTO) session.getAttribute("user");
+        for (Map<String, Object> list : params) {
+            String comment = (String) list.get("comment");
+            Integer bNo = (Integer) list.get("board_no");
+            CommentDTO pDTO = new CommentDTO();
+            pDTO.setUser_no(uDTO.getUser_no());
+            pDTO.setBoard_no(bNo);
+            pDTO.setComment_text(comment);
+            boardService.insertComment(pDTO);
+        }
     }
 
-    @GetMapping(value = "repDelete")
-    public String repDelete(HttpServletRequest request, Model model) {
+    @ResponseBody
+    @PostMapping("/commentUpdate")
+    public void commentUpdate(@RequestBody List<Map<String, Object>> params) throws Exception {
+        /*ObjectMapper objectMapper = new ObjectMapper();
+        List<Map<String, Object>> param = objectMapper.convertValue(params, new TypeReference<List<Map<String, Object>>>(){});*/
 
-        int cNo = Integer.parseInt(request.getParameter("cNo"));
-        String bNo = CmmUtil.nvl(request.getParameter("bNo"));
-        log.info(String.valueOf(cNo));
-        CommentDTO pDTO = new CommentDTO();
-        pDTO.setComment_no(cNo);
-        int res = boardService.repDelete(pDTO);
-        model.addAttribute("msg", "댓글이 삭제되었습니다");
-        model.addAttribute("bNo", bNo);
-        return "/board/MsgToBoardInfo";
+        for (Map<String, Object> list : params) {
+            String comment = (String) list.get("comment_text");
+            int comment_no = (int) list.get("comment_no");
+            CommentDTO pDTO = new CommentDTO();
+            pDTO.setComment_text(comment);
+            pDTO.setComment_no(comment_no);
+            boardService.commentUpdate(pDTO);
+        }
+    }
+
+    @ResponseBody
+    @PostMapping(value = "repDelete")
+    public int repDelete(@RequestBody List<Map<String, Object>> params) {
+        for (Map<String, Object> list : params) {
+            String comment_no = (String) list.get("comment_no");
+            int cNo = Integer.parseInt(comment_no);
+            CommentDTO pDTO = new CommentDTO();
+            pDTO.setComment_no(cNo);
+            boardService.repDelete(pDTO);
+        }
+        return 1;
     }
 
     @GetMapping(value = "board/boardInfo")
     public String NoticeInfo(HttpServletRequest request, ModelMap model, Criteria cri) {
 
         log.info(this.getClass().getName() + ".boardInfo start!");
-
-        
 
         try {
             /*
@@ -163,72 +181,58 @@ public class BoardController {
         return "/board/boardInfo";
     }
     @GetMapping(value = "/board/boardEditInfo")
-    public String BoardEditInfo(HttpServletRequest request, ModelMap model) {
+    public String BoardEditInfo(HttpServletRequest request, ModelMap model) throws Exception {
         log.info(this.getClass().getName() + ".BoardEditInfo start!");
-
-        String msg = "";
-
-        try {
-
-            String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글번호(PK)
-
+            String msg = "";
+            String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 글번호(PK)
             log.info("nSeq : " + nSeq);
-
             BoardDTO pDTO = new BoardDTO();
-
             pDTO.setBoard_no(Integer.parseInt(nSeq));
-
-            /*
-             * ####################################################### 공지사항 수정정보 가져오기(상세보기
-             * 쿼리와 동일하여, 같은 서비스 쿼리 사용함)
-             * #######################################################
-             */
             BoardDTO rDTO = boardService.getBoardInfo(pDTO);
-
             if (rDTO == null) {
                 rDTO = new BoardDTO();
-
             }
-
-            // 조회된 리스트 결과값 넣어주기
             model.addAttribute("rDTO", rDTO);
-
-        } catch (Exception e) {
-            msg = "실패하였습니다. : " + e.getMessage();
-            log.info(e.toString());
-            e.printStackTrace();
-
-        } finally {
-            log.info(this.getClass().getName() + ".BoardUpdate end!");
-
-            // 결과 메시지 전달하기
-            model.addAttribute("msg", msg);
-
-        }
-
         log.info(this.getClass().getName() + ".BoardEditInfo end!");
-
-
         return "/board/boardEditInfo";
     }
 
     @PostMapping(value = "/boardUpdate")
-    public String boardUpdate(HttpServletRequest request, Model model) throws Exception {
+    public String boardUpdate(MultipartHttpServletRequest request, Model model) throws Exception {
         String title = CmmUtil.nvl(request.getParameter("title"));
         String coursename = CmmUtil.nvl(request.getParameter("s2"));
         String contents = CmmUtil.nvl(request.getParameter("contents"));
-        String imgLink = CmmUtil.nvl(request.getParameter("imgLink"));
         int board_no = Integer.parseInt(CmmUtil.nvl(request.getParameter("nSeq")));
-        BoardDTO pDTO = new BoardDTO();
-        pDTO.setTitle(title);
-        pDTO.setCoursename(coursename);
-        pDTO.setContents(contents);
-        pDTO.setImglink(imgLink);
-        pDTO.setBoard_no(board_no);
-        boardService.boardUpdate(pDTO);
-
-        String msg = "글이 수정되었습니다.";
-        model.addAttribute("msg", msg);
+        String imgLink = CmmUtil.nvl(request.getParameter("imgLink"));
+        if(!Objects.requireNonNull(request.getFile("file")).isEmpty()) {
+            s3Service.deleteS3(imgLink);
+            MultipartFile file = request.getFile("file");
+            String imgPath = s3Service.upload(file);
+            String imglink = "https://d1y3hanryj5vy8.cloudfront.net/" + imgPath;
+            log.info(title);
+            log.info(coursename);
+            log.info(contents);
+            log.info(imglink);
+            BoardDTO pDTO = new BoardDTO();
+            pDTO.setTitle(title);
+            pDTO.setCoursename(coursename);
+            pDTO.setContents(contents);
+            pDTO.setBoard_no(board_no);
+            pDTO.setImglink(imglink);
+            boardService.boardUpdate(pDTO);
+            String msg = "글이 수정되었습니다.";
+            model.addAttribute("msg", msg);
+        }else{
+            BoardDTO pDTO = new BoardDTO();
+            pDTO.setTitle(title);
+            pDTO.setCoursename(coursename);
+            pDTO.setContents(contents);
+            pDTO.setBoard_no(board_no);
+            pDTO.setImglink(imgLink);
+            boardService.boardUpdate(pDTO);
+            String msg = "글이 수정되었습니다.";
+            model.addAttribute("msg", msg);
+        }
         return "/board/MsgToList";
 
     }
@@ -236,19 +240,26 @@ public class BoardController {
     @GetMapping(value = "/boardDelete")
     public String boardDelete(HttpServletRequest request, Model model) throws Exception{
         int board_no = Integer.parseInt(CmmUtil.nvl(request.getParameter("nSeq")));
-
         BoardDTO pDTO = new BoardDTO();
         pDTO.setBoard_no(board_no);
-        boardService.boardDelete(pDTO);
-        String msg = "게시글이 삭제 되었습니다.";
-        model.addAttribute("msg",msg);
-        return "/board/MsgToList";
-
-
+        BoardDTO rDTO = boardService.getBoardInfo(pDTO);
+        if (rDTO.getImglink() != null) {
+            String[] fileName = rDTO.getImglink().split("/");
+            s3Service.deleteS3(fileName[3]);
+            boardService.boardDelete(pDTO);
+            String msg = "게시글이 삭제 되었습니다.";
+            model.addAttribute("msg",msg);
+            return "/board/MsgToList";
+        }else {
+            boardService.boardDelete(pDTO);
+            String msg = "게시글이 삭제 되었습니다.";
+            model.addAttribute("msg",msg);
+            return "/board/MsgToList";
+        }
     }
 
     @GetMapping("/board/list")
-    public void boardListGET(HttpServletRequest request, Model model, Criteria cri) throws Exception {
+    public String boardListGET(HttpServletRequest request, Model model, Criteria cri) throws Exception {
         int pNo = 1;
         if (request.getParameter("pNo") != null) {
             pNo = Integer.valueOf(request.getParameter("pNo"));
@@ -262,7 +273,7 @@ public class BoardController {
             PageMakeDTO pageMake = new PageMakeDTO(cri, total);
 
             model.addAttribute("pageMaker", pageMake);
-
+            return "/board/list";
         }
         log.info("boardListGET");
 
@@ -275,11 +286,11 @@ public class BoardController {
         PageMakeDTO pageMake = new PageMakeDTO(cri, total);
 
         model.addAttribute("pageMaker", pageMake);
-
+        return "/board/list";
     }
 
     @GetMapping("/board/listByCourse")
-    public void boardListByCourseName(HttpServletRequest request, Model model, Criteria cri) throws Exception {
+    public String boardListByCourseName(HttpServletRequest request, Model model, Criteria cri) throws Exception {
         int pNo = 1;
         String courseDiv = CmmUtil.nvl(request.getParameter("s1"));
         String courseName = CmmUtil.nvl(request.getParameter("s2"));
@@ -302,6 +313,7 @@ public class BoardController {
 
             model.addAttribute("pageMaker", pageMake);
 
+            return "/board/list";
         }
 
         log.info("cri : " + cri);
@@ -315,6 +327,7 @@ public class BoardController {
         model.addAttribute("pageMaker", pageMake);
         model.addAttribute("s1",courseDiv);
         model.addAttribute("s2",courseName);
+        return "/board/list";
 
     }
 
