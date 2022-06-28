@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.mapper.IClubMapper">
+	<!--클럽이름 중복체크-->
+	<select id="nameChk" parameterType="ClubListDTO" resultType="ClubListDTO">
+		SELECT CASE WHEN COUNT(CLUB_NO)=1 THEN 'Y' ELSE 'N' END AS NAME_EXISTS FROM BIKECLUB WHERE CLUB_NAME=#{club_name}
+
+	</select>
+	<insert id="insertClub" parameterType="ClubListDTO">
+		<selectKey keyProperty="club_no" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(CLUB_NO+1),1) FROM BIKECLUB
+		</selectKey>
+		insert into BIKECLUB(CLUB_NO, 	CLUB_NAME, CLUB_INTRO, CLUB_PRESIDENT, CLUBRANGE, REGDATE,PRESIDENT_PHONENUM, PRESIDENT_NUM)
+		values (#{club_no}, #{club_name}, #{club_intro}, #{club_president}, #{clubrange}, #{regdate}, #{president_phonenum}, #{president_num})
+	</insert>
+
+	<delete id="deleteClub" parameterType="ClubListDTO">
+		delete from BIKECLUB where CLUB_NO=#{club_no};
+	</delete>
+
+	<update id="updateClub" parameterType="ClubListDTO">
+		update BikeTravel.BIKECLUB set BikeTravel.BIKECLUB.CLUB_INTRO=#{club_intro}, BikeTravel.BIKECLUB.CLUBRANGE=#{clubrange}, BikeTravel.BIKECLUB.IMGLINK=#{imgLink} where BikeTravel.BIKECLUB.CLUB_NO=#{club_no}
+	</update>
+	<select id="getClubList" resultType="ClubListDTO">
+		select * from (
+						  select *
+						  from BIKECLUB B
+						  order by CLUB_NO asc) as T1
+		limit #{skip},#{amount}
+	</select>
+
+	<select id="getClubMemberNum" resultType="ClubDTO">
+		select USER_NO from BikeTravel.CLUBDETAIL where CLUB_NO=#{club_no}
+	</select>
+
+	<select id="getClubListByRange" parameterType="java.util.HashMap" resultType="ClubListDTO">
+		select * from (
+						  select B.CLUB_NO, B.CLUB_NAME, B.CLUBRANGE, B.REGDATE, B.CLUB_INTRO,B.IMGLINK
+						  from BIKECLUB B
+						  WHERE CLUBRANGE = #{clubrange}
+						  order by CLUB_NO asc) as T1
+		limit #{skip},#{amount}
+	</select>
+
+	<!--동호회 상세조회-->
+	<select id="getClubDetail" parameterType="ClubListDTO" resultType="ClubListDTO">
+		select B.CLUB_NO, B.CLUB_NAME, B.CLUBRANGE, B.CLUB_PRESIDENT, count(C.CLUB_NO) as MEMBERCNT,
+		       B.CLUB_INTRO, B.REGDATE, B.IMGLINK, B.PRESIDENT_PHONENUM, B.PRESIDENT_NUM
+		from BIKECLUB B, CLUBDETAIL C
+		where B.CLUB_NO=#{club_no} and C.CLUB_NO=#{club_no};
+	</select>
+
+	<!--동호회 가입 신청-->
+	<insert id="joinWaiting" parameterType="WaitDTO">
+		<selectKey keyProperty="wait_no" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(WAIT_NO+1),1) FROM CLUB_WAIT
+		</selectKey>
+		insert into CLUB_WAIT(WAIT_NO, CLUB_NO, NAME, PHONENUM, ADDRESS, REGDATE, GREETING, USER_NO)
+		VALUES(#{wait_no},#{club_no}, #{name}, #{phonenum}, #{address}, #{regdate}, #{greeting},#{user_no})
+ 	</insert>
+	<!--동호회 승인대기 목록-->
+	<select id="getWaitList" resultType="WaitDTO">
+		select * from CLUB_WAIT where CLUB_NO=#{club_no}
+	</select>
+
+	<!--가입대기 데이터 호출-->
+	<select id="getWaitMember" resultType="WaitDTO">
+		select * from BikeTravel.CLUB_WAIT where WAIT_NO=#{wait_no}
+	</select>
+
+	<!--동호회 가입 승인-->
+	<insert id="joinAccept" parameterType="ClubDTO">
+		<selectKey keyProperty="join_no" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(JOIN_NO+1),1) FROM CLUBDETAIL
+		</selectKey>
+		insert into CLUBDETAIL(JOIN_NO, CLUB_NO, NAME, PHONENUM, ADDRESS, REGDATE,USER_NO)
+		values (#{join_no}, #{club_no}, #{name}, #{phonenum}, #{address}, #{regdate}, #{user_no})
+	</insert>
+
+	<!--동호회 가입신청 거절 -->
+	<delete id="deleteJoin" parameterType="WaitDTO">
+		delete from CLUB_WAIT where WAIT_NO=#{wait_no}
+	</delete>
+
+	<!--페이징 총갯수-->
+	<select id="totalCount" resultType="int">
+		select count(*) from BIKECLUB
+	</select>
+
+	<!--페이징 총갯수-->
+	<select id="totalCountByRange" parameterType="ClubListDTO" resultType="int">
+		select count(*) from BIKECLUB WHERE CLUBRANGE=#{clubrange}
+	</select>
+
+	<!--동호회 일정 추가-->
+	<insert id="insertCalendar" parameterType="CalendarDTO">
+		<selectKey keyProperty="cal_no" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(CAL_NO+1),1) FROM CALENDAR
+		</selectKey>
+		insert into CALENDAR(CAL_NO, CLUB_NO, TITLE, STARTDATE, ENDDATE)
+		VALUES(#{cal_no},#{club_no}, #{title}, #{startdate}, #{enddate})
+	</insert>
+
+	<!--동호회 일정 조회-->
+	<select id="getCalendarList" resultType="CalendarDTO">
+		select * from CALENDAR where CLUB_NO=#{club_no}
+	</select>
+
+	<!--동호회 일정 삭제-->
+	<delete id="deleteCalendar">
+		delete from CALENDAR where STARTDATE=#{startdate} and ENDDATE=#{enddate} and CLUB_NO=#{club_no} and TITLE=#{title}
+	</delete>
+
+
+</mapper>

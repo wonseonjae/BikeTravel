@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap.min.css">
 <html>
 <head>
 
@@ -67,15 +67,11 @@
             }
 
         }
-    </script>
-    <script>
         function mailcheck(){
             let i = document.join.mail3.selectedIndex // 선택항목의 인덱스 번호
             let mail = document.join.mail3.options[i].value // 선택항목 value
             document.join.user_maildomain.value=mail
     }
-    </script>
-    <script>
         function emailSend(){
             let clientEmailId = document.getElementById('user_mailid').value;
             let clientEmailDomain = document.getElementById('user_maildomain').value;
@@ -91,6 +87,7 @@
                     url:"/mailSend",
                     data:{userEmail:clientEmail},
                     success : function (data){
+                        alert('메일이 전송되었습니다. 인증번호를 확인해주세요.')
                     },error : function (e) {
                         alert('오류입니다. 잠시 후 다시 시도해주세요')
                     }
@@ -113,7 +110,6 @@
                 type:"POST",
                 url:"/mailReg",
                 data:{ userEmail:clientEmail , inputCode:inputCode},
-
                 success : function (result){
                     console.log(result);
                     if (result == true) {
@@ -127,7 +123,6 @@
                     }
                 }
                 }
-
             );
         }
     </script>    <script>
@@ -141,7 +136,6 @@
                     console.log(result)
                     if(result >= 1) {
                         alert("중복된 아이디입니다.");
-
                     } else if (result == 0) {
                         $("#idChk").attr("value", "Y");
                         document.getElementById('idChkYN').value = "Y";
@@ -154,6 +148,10 @@
         function emailCheck() {
             let clientEmailId = document.getElementById('user_mailid').value;
             let clientEmailDomain = document.getElementById('user_maildomain').value;
+            if (clientEmailDomain==="" || clientEmailId===""){
+                alert("공백없이 입력해주시기 바랍니다.");
+                return
+            }
 
 
             $.ajax({
@@ -192,7 +190,8 @@
 
             })
         }
-    </script>    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>    <script>
+    </script>    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
         function check_pw(){
             let pw = document.getElementById('pw').value;
             let SC = ["!","@","#","$","%","*"];
@@ -228,7 +227,9 @@
 <body>
 <form name="join" method="post" action="/signUpReg" onsubmit="return doSubmit(this);">
     <div class="container">
+        <div style="border:none; border-bottom: #999999 1px">
         <h1>회원가입</h1>
+        </div>
         <div class="form-group">
             <label>아이디</label>
             <input type="text" id="user_id" class="form-control" name="user_id" placeholder="아이디">
@@ -256,28 +257,28 @@
             <label>이메일 아이디</label>
         </div>
         <div class="form-group">
-            <input type="text" style="width:400px;height:35px;" id="user_mailid" name="user_mailid" placeholder="Email아이디" >
+            <input type="text" style="width:150px;height:35px;" id="user_mailid" name="user_mailid" placeholder="Email아이디" >
 
                 <label>&nbsp;@&nbsp;</label>
 
-                <input type="text" style="width:500px;height:35px;" id="user_maildomain" name="user_maildomain" placeholder="도메인을 선택해주세요" readonly>
+                <input type="text" style="width:150px;height:35px;" id="user_maildomain" name="user_maildomain" placeholder="도메인을 선택해주세요" readonly>
                 <input type="hidden" class="form-control" name="mailChkYN" id="mailChkYN">
-                    <select style="width:120px;height:35px;" name="mail3" onChange="mailCheck()">
+                    <select style="width:100px;height:35px;" name="mail3" onChange="mailCheck()">
                     <option value="gmail.com" >gmail.com</option>
                     <option value="naver.com">naver.com</option>
                 </select>
-            <button type="button" class="btn btn-primary" onclick="emailSend()">발송</button>
             <button type="button" class="btn btn-primary" onclick="emailCheck()">중복체크</button>
+            <button type="button" class="btn btn-primary" onclick="emailSend()">발송</button>
+
         </div>
         <div class="form-group">
             <label>인증번호</label>
-            <input type="text" class="form-control" name="certificationCode" id="certificationCode" placeholder="비밀번호">
+            <input type="text" class="form-control" name="certificationCode" id="certificationCode" placeholder="인증번호">
             <input type="hidden" class="form-control" name="certificationYN" id="certificationYN">
             <button type="button" class="btn btn-primary" onclick="emailCertification()">인증하기</button>
         </div>
 
-
-        <button type="submit" class="btn btn-primary">가입 완료</button>
+        <button type="submit" style="width: 100%" class="btn btn-primary">가입 완료</button>
     </div>
 
 </form>

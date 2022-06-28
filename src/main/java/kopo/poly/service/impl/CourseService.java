@@ -1,10 +1,16 @@
 package kopo.poly.service.impl;
 import kopo.poly.dto.CertificationDTO;
 import kopo.poly.dto.CourseDTO;
+import kopo.poly.dto.ImageDTO;
 import kopo.poly.mapper.ICourseMapper;
 import kopo.poly.service.ICourseService;
+import kopo.poly.util.CmmUtil;
 import kopo.poly.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -83,5 +89,60 @@ public class CourseService implements ICourseService {
             rDTO = new CertificationDTO();
         }
         return rDTO;
+    }
+
+    @Override
+    public int deleteCourse(String pCourse) throws Exception {
+        log.info(this.getClass().getName() + ".deleteCourse start!");
+
+        int res = 0;
+
+        String colNm = "BikeCourse";
+
+        res = courseMapper.deleteCourse(colNm, pCourse);
+
+        log.info(this.getClass().getName() + "deleteCourse end!");
+
+        return res;
+    }
+
+    @Override
+    public int deleteCertification(String pCertificate) throws Exception {
+        log.info(this.getClass().getName() + ".deleteCertificate start!");
+
+        int res = 0;
+
+        String colNm = "BikeCertification";
+
+        res = courseMapper.deleteCertification(colNm, pCertificate);
+
+        log.info(this.getClass().getName() + "deleteCertificate end!");
+
+        return res;
+    }
+
+    @Override
+    public int insertCourse(CourseDTO pDTO) throws Exception {
+        log.info(this.getClass().getName() + ".insertCourse Start!");
+
+        String colNm = "BikeCourse";
+
+        courseMapper.insertCourse(pDTO, colNm);
+
+        log.info(this.getClass().getName() + ".insertCourse End!");
+
+        return 1;
+    }
+
+    @Override
+    public int insertCertificate(CertificationDTO pDTO) throws Exception {
+        log.info(this.getClass().getName() + ".insertCertificate Start!");
+
+        String colNm = "BikeCertification";
+
+        courseMapper.insertCertificate(pDTO, colNm);
+
+        log.info(this.getClass().getName() + ".insertCertificate End!");
+        return 0;
     }
 }

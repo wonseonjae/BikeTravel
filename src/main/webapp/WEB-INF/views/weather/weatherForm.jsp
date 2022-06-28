@@ -1,21 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="board/layout/defaultLayout">
-
+<html>
 <head>
     <title>Weather</title>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js" integrity="sha256-xH4q8N0pEzrZMaRmd7gQVcTZiFei+HfRTBPJ1OGXC0k=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 
-    <script>
-        function mailcheck(){
-            let i = document.join.step3.selectedIndex // 선택항목의 인덱스 번호
-            let sido = document.join.step3.options[i].value // 선택항목 value
-            document.join.sido.value=sido
+    <script type='text/javascript'>
+        function sidoCheck(){
+            let i = document.getElementById("step3").selectedIndex // 선택항목의 인덱스 번호
+            let sido = document.getElementById("step3").options[i].value // 선택항목 value
+            document.getElementById("sido").value=sido
         }
         window.onload = function() {
             $('#datepicker').datepicker({
@@ -41,15 +37,11 @@
 
             });
 
-
-
         loadArea('city');
 
         $('#step1').on("change", function() {
             loadArea('county', $(this));
-
         });
-
         $('#step2').on("change", function() {
             loadArea('town', $(this));
         });
@@ -83,16 +75,10 @@
                     let gridY = data.gridY;
                     $('input[name=gridX]').attr('value',gridX);
                     $('input[name=gridY]').attr('value',gridY);
-
-
                     }
-
                 }
-
-
             )
         }
-
         function loadArea(type, element) {
             let value = $(element).find('option:selected').text();
             let data = {type : type, keyword : value};
@@ -128,53 +114,137 @@
                 }
             });
         }
-    </script>
-    <%--<script>
-        function getWeather() {
-            let xhr = new XMLHttpRequest();
-            let gridX = document.getElementById("coordX").value;
-            let gridY = document.getElementById("coordY").value;
-            let day = document.getElementById("datepicker").value;
-            let time = document.getElementById("time").value;
-            let url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'; /*URL*/
-            let queryParams = '?' + encodeURIComponent('serviceKey') + '='+'7EpF3TCkgMENfaz3eaLHbldfYrPuDMZRi2IEbYu1fGqnoUxT5ZB6xm28C3Xv6TB2IegtMlKzIlLLNExhFq1FsQ%3D%3D'; /*Service Key*/
-            queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /**/
-            queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('1000'); /**/
-            queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('JSON'); /**/
-            queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent(day); /**/
-            queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent(time); /**/
-            queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent(gridX); /**/
-            queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent(gridY); /**/
-            xhr.open('GET', url + queryParams);
-            xhr.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    alert(' nBody: '+this.responseText);
-                    let header = JSON.stringify(this.responseText);
-                    $('input[name=weather]').attr('nbody',header);
-                }
-            };
+        function getWeather(){
+            $('#result').empty();
+            let data = new Array();
+            let obj = new Object();
+            let datePick =document.getElementById('datepicker').value;
+            if (datePick === ""){
+                alert('날짜를 선택해주시기 바랍니다.')
+                return
+            }
+            let tm = document.getElementById('time').value;
+            if (tm === ""){
+                alert('시간을 선택해주시기 바랍니다.')
+                return
+            }
+            let grX = document.getElementById('gridX').value;
+            if (grX === ""){
+                alert('지역을 선택해주시기 바랍니다.')
+                return
+            }
+            let grY = document.getElementById('gridY').value;
+            if (grX === ""){
+                alert('지역을 선택해주시기 바랍니다.')
+                return
+            }
+            let sd = document.getElementById('sido').value;
+            if (grX === ""){
+                alert('지역을 선택해주시기 바랍니다.')
+                return
+            }
+            obj.date = datePick
+            obj.time = tm
+            obj.gridX = grX
+            obj.gridY = grY
+            obj.sido = sd
+            data.push(obj);
+            console.log(data);
+            $.ajax({
+                url: "/weatherReg",
+                data: JSON.stringify(data),
+                dataType:"JSON",
+                method:"POST",
+                contentType: 'application/json',
+                success : function(res){
+                    res.forEach(function (result) {
+                        let time = result.time.substr(0,2);
+                        $('#result').append('<hr>')
+                        $('#result').append('<h4>'+result.sido+'&nbsp;'+result.gungu+'&nbsp;'+result.dong+'&nbsp;'+time+'시 날씨입니다'+'</h4>')
+                        if (result.pty=="0"){
+                            $('#result').append('<a>맑음</a><img width="50px" height="50px" src="/image/맑음.JPG">'+'&nbsp;'+'&nbsp;')
+                        }else if (result.pty=="1") {
+                            $('#result').append('<a>비</a><img width="50px" height="50px" src="/image/비.JPG">'+'&nbsp;'+'&nbsp;')
+                        }else if (result.pty=="4") {
+                            $('#result').append('<a>소나기</a><img width="50px" height="50px" src="/image/소나기.JPG">'+'&nbsp;'+'&nbsp;')
+                        }
 
-            xhr.send();
+                        if (result.reh <=40){
+                            $('#result').append('<a>습도 : 건조('+result.reh+'%)</a>'+'&nbsp;'+'&nbsp;')
+                        }else if (result.reh >40 && result.reh <=60){
+                            $('#result').append('<a>습도 : 적정('+result.reh+'%)</a>'+'&nbsp;'+'&nbsp;')
+                        }else if (result.reh >60) {
+                            $('#result').append('<a>습도 : 습함('+result.reh+'%)</a>'+'&nbsp;'+'&nbsp;')
+                        }
+
+                        if (result.vec <=90){
+                            $('#result').append('<a>풍향 : 북동 </a>'+'&nbsp;'+'&nbsp;')
+                        }else if (result.vec >90 && result.vec <=180){
+                            $('#result').append('<a>풍향 : 남동 </a>'+'&nbsp;'+'&nbsp;')
+                        }else if (result.vec >180 && result.vec <=270){
+                            $('#result').append('<a>풍향 : 남서 </a>'+'&nbsp;'+'&nbsp;')
+                        }else if (result.vec > 270 && result.vec <=360){
+                            $('#result').append('<a>풍향 : 북서 </a>'+'&nbsp;'+'&nbsp;')
+                        }
+
+                        if (result.wsd <= 14){
+                            $('#result').append('<a>풍속 : 보통('+result.wsd+'m/s)</a>'+'&nbsp;'+'&nbsp;')
+                        }else if (result.wsd > 14){
+                            $('#result').append('<a>풍속 : 강풍('+result.wsd+'m/s)</a>'+'&nbsp;'+'&nbsp;')
+                        }
+
+
+                    });
+                }
+
+
+                })
+
         }
-    </script>--%>
+    </script>
+    <style>
+        .w-btn {
+            position: relative;
+            border: none;
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-family: "paybooc-Light", sans-serif;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+        .w-btn-brown {
+            background-color: #ce6d39;
+            color: #ffeee4;
+        }
+    </style>
+
+
     </head>
 
 <body>
-    <form name="join" class="form-horizontal" method="get" action="/weatherReg">
+
         <div class="form-group">
             <input id="sido" name ="sido" type="hidden">
-            <select id="step1" name="step1" class="emptyCheck" title="시/도">
+            <span>시/도</span>
+            <select style="max-width: 80px" id="step1" name="step1" class="emptyCheck" title="시/도">
                 <option id="city" value="">시/도</option>
             </select>
-            <select id="step2">
+            <span>시/군/구</span>
+            <select id="step2" style="max-width: 80px">
                 <option id="county" value="">시/군/구</option>
             </select>
-            <select id="step3" name="step3" onChange="mailcheck()">
+            <span>읍/면/동</span>
+            <select style="max-width: 80px" id="step3" name="step3" onchange="sidoCheck()">
                 <option id="town" value="">읍/면/동</option>
             </select>
             <input type="hidden" id="gridX" name="gridX">
             <input type="hidden" id="gridY" name="gridY">
             <input type="hidden" id="datePick" name="datePick">
+            <br>
+            <br>
             <span>날짜 선택: <input type="text" id="datepicker" name="datepicker" disabled="disabled" title="날짜"></span>
             <select id="time" name="time" title="시간" class="form-control">
                 <option value="" selected>시간</option>
@@ -189,13 +259,17 @@
                     </c:choose>
                 </c:forEach>
             </select>
-
             <%--<button type="button" class="btn btn-primary waves-effect waves-light" onclick="getWeather()">
                 <span>실행</span>
             </button>--%>
-            <input type="submit" value="조회">
+            <button class="w-btn w-btn-brown" type="button" onclick="getWeather()">
+                기상조회
+            </button>
         </div>
-    </form>
+
+        <div id="result" name="result" class="result">
+
+        </div>
 
 </body>
 </html>

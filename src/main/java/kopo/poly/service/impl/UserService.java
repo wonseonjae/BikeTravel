@@ -1,5 +1,6 @@
 package kopo.poly.service.impl;
 
+import kopo.poly.dto.NoticeDTO;
 import kopo.poly.dto.UserDTO;
 import kopo.poly.mapper.IUserMapper;
 import kopo.poly.service.IUserService;
@@ -121,7 +122,10 @@ public class UserService implements IUserService {
         return res;
     }
 
-
+    @Override
+    public List<NoticeDTO> getNoticeList() {
+        return userMapper.getNoticeList();
+    }
 
 
 }

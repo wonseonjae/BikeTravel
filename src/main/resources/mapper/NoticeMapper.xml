@@ -5,13 +5,20 @@
 <mapper namespace="kopo.poly.mapper.IUserMapper">
 	<!--회원가입-->
 	<insert id="saveUser" parameterType="UserDTO">
+		<selectKey keyProperty="user_no" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(USER_NO+1),1) FROM USER_INFO
+		</selectKey>
 		INSERT INTO USER_INFO
 		(USER_NO, USER_ID, USER_PW, USER_NAME, USER_MAILID, USER_MAILDOMAIN, REGDATE, AUTHORITY)
-		VALUES (
-					   (SELECT NULLIF (MAX(A.USER_NO),0)+1 FROM USER_INFO A),
-				 #{user_id}, #{user_pw}, #{user_name}, #{user_mailid}, #{user_maildomain}, SYSDATE(), #{authority}
+		VALUES ( #{user_no}, #{user_id}, #{user_pw}, #{user_name}, #{user_mailid},
+		        #{user_maildomain}, SYSDATE(), #{authority}
 			)
 	</insert>
+
+	<!--공지목록 호출-->
+	<select id="getNoticeList" resultType="NoticeDTO">
+		SELECT * from NOTICE
+	</select>
 
 	<!--아이디 중복체크-->
 	<select id="idCheck" parameterType="UserDTO" resultType="UserDTO">

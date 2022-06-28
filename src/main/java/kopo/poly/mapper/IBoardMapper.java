@@ -13,10 +13,6 @@ import java.util.Objects;
 public interface IBoardMapper {
     int Upload(BoardDTO pDTO);
 
-    List<BoardDTO> getBoardList() throws Exception;
-
-    List<BoardDTO> getBoardListByCourse(BoardDTO pDTO) throws Exception;
-
     int totalCount(Criteria cri) throws Exception;
 
     int totalCountByCourse(BoardDTO pDTO) throws Exception;
@@ -35,6 +31,8 @@ public interface IBoardMapper {
     int insertComment(CommentDTO pDTO) throws Exception;
 
     List<CommentDTO> getComment(CommentDTO pDTO);
+
+    int commentUpdate(CommentDTO pDTO);
 
     int getRepCnt(CommentDTO pDTO);
 

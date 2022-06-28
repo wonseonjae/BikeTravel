@@ -1,5 +1,6 @@
 package kopo.poly.mapper;
 
+import kopo.poly.dto.NoticeDTO;
 import kopo.poly.dto.UserDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,4 +15,6 @@ public interface IUserMapper {
     UserDTO nameCheck(UserDTO pDTO);
 
     UserDTO mailCheck(UserDTO pDTO);
+
+    List<NoticeDTO> getNoticeList();
 }

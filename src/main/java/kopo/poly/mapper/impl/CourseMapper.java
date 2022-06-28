@@ -1,5 +1,6 @@
 package kopo.poly.mapper.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import kopo.poly.dto.CertificationDTO;
@@ -11,8 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Component("CourseMapper")
@@ -99,10 +102,10 @@ public class CourseMapper extends AbstractMongoDBComon implements ICourseMapper 
             String courseName = CmmUtil.nvl(doc.getString("구간명"));
             String checkPoint = CmmUtil.nvl(doc.getString("문화관명"));
 
-            /*
+
             log.info("구간명 : " + courseName);
             log.info("문화관명 : " + checkPoint);
-            */
+
 
             CertificationDTO rDTO = new CertificationDTO();
 
@@ -242,8 +245,119 @@ public class CourseMapper extends AbstractMongoDBComon implements ICourseMapper 
 
             }
 
-
         }
         return rDTO;
     }
+
+    @Override
+    public int deleteCourse(String pColNm, String pCourse) throws Exception {
+        log.info(this.getClass().getName() + "deleteCourse start!");
+
+        int res = 0;
+
+        MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+        log.info("pColNm : "+ pColNm);
+
+        Document query = new Document();
+        query.append("코스명", pCourse);
+
+        FindIterable<Document> rs = col.find(query);
+
+        rs.forEach(document -> col.deleteOne(document));
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".deleteCourse end!");
+
+        return res;
+    }
+
+    @Override
+    public int deleteCertification(String pColNm, String pCertificate) throws Exception {
+        log.info(this.getClass().getName() + "deleteCertification start!");
+
+        int res = 0;
+
+        MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+        log.info("pColNm : "+ pColNm);
+
+        Document query = new Document();
+        query.append("문화관명", pCertificate);
+
+        FindIterable<Document> rs = col.find(query);
+
+        rs.forEach(document -> col.deleteOne(document));
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".deleteCertification end!");
+
+        return res;
+    }
+
+    @Override
+    public int insertCertificate(CertificationDTO pDTO, String colNm) throws Exception {
+        log.info(this.getClass().getName() + ".insertCertificate Start!");
+
+        int res = 0;
+
+        if (pDTO == null) {
+            pDTO = new CertificationDTO();
+        }
+
+        Map<String, String> pMap = new LinkedHashMap<>();
+        pMap.put("구간명",pDTO.getCourseName());
+        pMap.put("문화관명",pDTO.getCheckPoint());
+        pMap.put("주소",pDTO.getAddress());
+        pMap.put("전화번호",pDTO.getPhoneNum());
+        pMap.put("운영시간",pDTO.getOperateTime());
+        pMap.put("주요시설",pDTO.getAutoCkeck());
+
+        // 저장할 컬렉션 객체 생성
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+
+        // 레코드 한개씩 저장하기
+        col.insertOne(new Document(new ObjectMapper().convertValue(pMap, Map.class)));
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".insertCertificate End!");
+
+        return res;
+    }
+
+    @Override
+    public int insertCourse(CourseDTO pDTO, String colNm) throws Exception {
+        log.info(this.getClass().getName() + ".insertCourse Start!");
+
+        int res = 0;
+
+        if (pDTO == null) {
+            pDTO = new CourseDTO();
+        }
+        Map<String, String> pMap = new LinkedHashMap<>();
+        pMap.put("코스구분명",pDTO.getCourseDiv());
+        pMap.put("코스명",pDTO.getCourseName());
+        pMap.put("출발점",pDTO.getStartPoint());
+        pMap.put("도착점",pDTO.getEndPoint());
+        pMap.put("소요시간",pDTO.getTimeHour());
+        pMap.put("소요분",pDTO.getTimeMinute());
+        pMap.put("소개",pDTO.getCourseIntro());
+
+
+        // 저장할 컬렉션 객체 생성
+        MongoCollection<Document> col = mongodb.getCollection(colNm);
+
+            // 레코드 한개씩 저장하기
+        col.insertOne(new Document(new ObjectMapper().convertValue(pMap, Map.class)));
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".insertCourse End!");
+
+        return res;
+    }
+
 }

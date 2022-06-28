@@ -50,23 +50,32 @@
             })
         }
     </script>
+    <style type="text/css">
+        .main{
+            padding-top: 80px;
+            text-align: center;
+            max-width: 600px;
+            height: 60%;
+            padding-right:15px;
+            padding-left:15px;
+            margin-right:auto;
+            margin-left:auto
+        }
+    </style>
 
 </head>
 <body>
 <form name="join" method="post" action="/admin/chgName" onsubmit="return doOnload(this);">
-
-    <div class="container">
+    <div class="main">
         <h2>닉네임 변경</h2>
         <div class="form-group">
             <input type="text" style="width:400px;height:35px;" id="user_name" name="user_name" placeholder="새로 사용하고 싶으신 닉네임을 입력해주세요" >
             <input type="hidden" id="nameChkYN" name="nameChkYN">
             <input type="hidden" id="user_no" name="user_no" onkeypress="" value="<%=userDTO.getUser_no()%>">
-            <input type="button" value="중복체크" onclick="nameCheck()">
+            <input type="button" class="btn btn-primary" value="중복체크" onclick="nameCheck()"><br>
+            <input type="submit" class="btn btn-primary" value="변경">
         </div>
-
     </div>
-        <input type="submit" class="btn btn-primary" value="변경">
-
 </form>
 </body>
 </html>

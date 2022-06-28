@@ -1,6 +1,9 @@
 package kopo.poly.service;
 
+import kopo.poly.dto.NoticeDTO;
 import kopo.poly.dto.UserDTO;
+
+import java.util.List;
 
 
 public interface IUserService {
@@ -16,6 +19,8 @@ public interface IUserService {
 
     //메일 중복체크
     int mailCheck(UserDTO pDTO);
+
+    List<NoticeDTO> getNoticeList();
 
 
 

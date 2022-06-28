@@ -35,9 +35,23 @@
         }
 
     </script>
+    <style type="text/css">
+        .main{
+            padding-top: 80px;
+            text-align: center;
+            max-width: 600px;
+            height: 60%;
+            padding-right:15px;
+            padding-left:15px;
+            margin-right:auto;
+            margin-left:auto
+
+        }
+    </style>
 
 </head>
 <body>
+<div class="main">
 <form name="join" method="post" action="/admin/chgPw">
 
     <div class="container">
@@ -50,5 +64,6 @@
     </div>
 
 </form>
+</div>
 </body>
 </html>

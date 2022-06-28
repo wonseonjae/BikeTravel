@@ -35,21 +35,6 @@ public class BoardService {
 
    }
 
-   //게시글 목록 호출
-   public List<BoardDTO> getBoardList() throws Exception {
-       log.info(this.getClass().getName() + ".getBoardList start");
-       log.info(this.getClass().getName() + ".getBoardList end");
-        return iBoardMapper.getBoardList();
-
-   }
-
-   //게시글 코스로 검색하기
-    public List<BoardDTO> getBoardListByCourse(BoardDTO pDTO) throws Exception {
-        log.info(this.getClass().getName() + ".getBoardList start");
-        log.info(this.getClass().getName() + ".getBoardList end");
-
-        return iBoardMapper.getBoardListByCourse(pDTO);
-    }
 
     //게시글 총갯수 조회
     public int totalCount(Criteria cri) throws Exception {
@@ -122,6 +107,12 @@ public class BoardService {
     public int repDelete(CommentDTO pDTO) {
        iBoardMapper.repDelete(pDTO);
        return 0;
+    }
+
+    public void commentUpdate(CommentDTO pDTO) throws Exception{
+        log.info(this.getClass().getName() + ".commentUpdate start!");
+        pDTO.setRegdate(localTime);
+        iBoardMapper.commentUpdate(pDTO);
     }
 
 }

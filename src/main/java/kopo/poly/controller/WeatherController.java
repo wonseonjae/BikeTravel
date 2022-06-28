@@ -1,5 +1,6 @@
 package kopo.poly.controller;
 
+import kopo.poly.dto.WaitDTO;
 import kopo.poly.dto.WeatherDTO;
 import kopo.poly.service.IWeatherService;
 import kopo.poly.util.ApiParse;
@@ -20,6 +21,7 @@ import java.net.URLEncoder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,54 +69,69 @@ public class WeatherController {
 
     }
 
-    @GetMapping(value = "/weatherReg")
-    public String weeatherReg(HttpServletRequest request, Model model) throws IOException, ParseException {
-        String areaCode = CmmUtil.nvl(request.getParameter("sido"));
+    @ResponseBody
+    @PostMapping(value = "/weatherReg")
+    public List<Map<String, Object>> weeatherReg(@RequestBody List<Map<String, Object>> params) throws Exception{
+        log.info("WeatherReg start!");
         WeatherDTO pDTO = new WeatherDTO();
-        pDTO.setAreacode(areaCode);
-        WeatherDTO rDTO = weatherService.getArea(pDTO);
-        String day = CmmUtil.nvl(request.getParameter("datePick"));
-        String time = CmmUtil.nvl(request.getParameter("time"));
-        String gridX = CmmUtil.nvl(request.getParameter("gridX"));
-        String gridY = CmmUtil.nvl(request.getParameter("gridY"));
-        StringBuilder res =  ApiParse.main(day, time, gridX, gridY);
-        String data = res.toString();
-        JSONParser parser = new JSONParser();
-        JSONObject obj = (JSONObject) parser.parse(data);
-        JSONObject obj1 = (JSONObject) obj.get("response");
-        JSONObject obj2 = (JSONObject) obj1.get("body");
-        JSONObject obj3 = (JSONObject) obj2.get("items");
-        JSONArray obj4 = (JSONArray) obj3.get("item");
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < obj4.size(); i++) {
-            JSONObject obj5 = (JSONObject) obj4.get(i);
-            String content = (String) obj5.get("obsrValue");
-            sb.append(content+",");
-        }
-        String[] result = sb.toString().split(",");
-        String pty = result[0];
-        String reh = result[1];
-        String rn = result[2];
-        String tH = result[3];
-        String uuu = result[4];
-        String vec = result[5];
-        String vvv = result[6];
-        String wsd = result[7];
-
-        String sido = rDTO.getStep1();
-        String gungu = rDTO.getStep2();
-        String dong = rDTO.getStep3();
-        model.addAttribute("time",time);
-        model.addAttribute("sido", sido);
-        model.addAttribute("gungu", gungu);
-        model.addAttribute("dong", dong);
-        model.addAttribute("pty", pty);
-        model.addAttribute("reh", reh);
-        model.addAttribute("t1h", tH);
-        model.addAttribute("vec", vec);
-        model.addAttribute("wsd", wsd);
-
-        return "/weather/result";
+        JSONObject jsonObj = new JSONObject();
+        JSONArray jsonArr = new JSONArray();
+        HashMap<String, Object> hash = new HashMap<>();
+        for (Map<String, Object> list : params) {
+            String areaCode = (String) list.get("sido");
+            pDTO.setAreacode(areaCode);
+            WeatherDTO rDTO = weatherService.getArea(pDTO);
+            log.info(areaCode);
+            String day = (String) list.get("date");
+            log.info(day);
+            String time = (String) list.get("time");
+            log.info(time);
+            String gridX = (String) list.get("gridX");
+            log.info(gridX);
+            String gridY = (String) list.get("gridY");
+            log.info(gridY);
+            StringBuilder res = ApiParse.main(day, time, gridX, gridY);
+            String data = res.toString();
+            JSONParser parser = new JSONParser();
+            JSONObject obj = (JSONObject) parser.parse(data);
+            JSONObject obj1 = (JSONObject) obj.get("response");
+            JSONObject obj2 = (JSONObject) obj1.get("body");
+            JSONObject obj3 = (JSONObject) obj2.get("items");
+            JSONArray obj4 = (JSONArray) obj3.get("item");
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < obj4.size(); i++) {
+                JSONObject obj5 = (JSONObject) obj4.get(i);
+                String content = (String) obj5.get("obsrValue");
+                sb.append(content + ",");
+            }
+            String[] result = sb.toString().split(",");
+            String pty = result[0];
+            String reh = result[1];
+            String rn = result[2];
+            String tH = result[3];
+            String uuu = result[4];
+            String vec = result[5];
+            String vvv = result[6];
+            String wsd = result[7];
+            String sido = rDTO.getStep1();
+            String gungu = rDTO.getStep2();
+            String dong = rDTO.getStep3();
+            hash.put("time",time);
+            hash.put("pty",pty);
+            hash.put("reh",reh);
+            hash.put("rn",rn);
+            hash.put("tH",tH);
+            hash.put("uuu",uuu);
+            hash.put("vec",vec);
+            hash.put("vvv",vvv);
+            hash.put("wsd",wsd);
+            hash.put("sido",sido);
+            hash.put("gungu",gungu);
+            hash.put("dong",dong);
+            jsonObj = new JSONObject(hash);
+            jsonArr.add(jsonObj);
+            }
+        log.info("jsonArrCheck: {}", jsonArr);
+        return jsonArr;
     }
-
 }

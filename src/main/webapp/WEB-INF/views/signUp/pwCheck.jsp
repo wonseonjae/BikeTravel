@@ -15,12 +15,26 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
     <title>마이페이지</title>
+    <style type="text/css">
+        .main{
+            padding-top: 80px;
+            text-align: center;
+            max-width: 600px;
+            height: 60%;
+            padding-right:15px;
+            padding-left:15px;
+            margin-right:auto;
+            margin-left:auto
+
+        }
+    </style>
 
 </head>
 <body>
+<div class="main">
 <form method="post" action="/admin/pwCheck">
     <div>
-        <li>비밀번호를 입력해주세요</li>
+        <h3>비밀번호를 입력해주세요</h3>
     </div>
     <div>
         <input type="password" id="user_pw" name="user_pw">
@@ -28,6 +42,6 @@
         <input type="submit" value="확인">
     </div>
 </form>
-
+</div>
 </body>
 </html>

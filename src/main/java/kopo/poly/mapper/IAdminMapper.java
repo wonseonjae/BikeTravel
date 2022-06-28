@@ -1,7 +1,6 @@
 package kopo.poly.mapper;
 
-import kopo.poly.dto.BoardDTO;
-import kopo.poly.dto.UserDTO;
+import kopo.poly.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -10,9 +9,32 @@ import java.util.List;
 public interface IAdminMapper {
 
     //회원 리스트 호출
-    List<UserDTO> getUserList();
+    List<UserDTO> getUserPaging(Criteria cri);
 
-    //회원 정보 호출
+    //회원 리스트 페이징
+    int userTotalCount(Criteria cri) throws Exception;
+
+    //공지 리스트 호출
+    List<NoticeDTO> getNoticePaging(Criteria cri);
+
+    //공지 리스트 페이징
+    int NoticeTotalCount(Criteria cri) throws Exception;
+
+    //동호회 리스트 호출
+    List<ClubListDTO> getClubList();
+
+    //공지 리스트 호출
+    List<NoticeDTO> getNoticeList();
+
+    //공지 상세보기
+    NoticeDTO noticeDetail(NoticeDTO pDTO);
+
+    //공지 삭제
+    int deleteNotice(NoticeDTO pDTO);
+
+    int insertNotice(NoticeDTO pDTO);
+
+   //회원 정보 호출
     UserDTO getUserInfo(UserDTO pDTO) throws Exception;
 
     //회원 작성글 목록

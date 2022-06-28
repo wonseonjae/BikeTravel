@@ -1,14 +1,31 @@
 package kopo.poly.service;
 
-import kopo.poly.dto.BoardDTO;
-import kopo.poly.dto.UserDTO;
+import kopo.poly.dto.*;
 
 import java.util.List;
 
 public interface IAdminService {
 
     //회원 리스트 호출
-    List<UserDTO> getUserList();
+    List<UserDTO> getUserPaging(int uNo);
+
+    //회원 리스트 페이징
+    int userTotalCount(Criteria cri) throws Exception;
+
+    //회원 리스트 호출
+    List<NoticeDTO> getNoticePaging(int uNo);
+
+    //회원 리스트 페이징
+    int noticeTotalCount(Criteria cri) throws Exception;
+
+    //공지 작성
+    int insertNotice(NoticeDTO pDTO);
+
+    //공지 삭제
+    int deleteNotice(NoticeDTO pDTO);
+
+    //공지 상세보기
+    NoticeDTO noticeDetail(NoticeDTO pDTO);
 
     //회원 정보 호출
     UserDTO getUserInfo(UserDTO pDTO) throws Exception;

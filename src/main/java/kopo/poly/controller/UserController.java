@@ -1,7 +1,7 @@
 package kopo.poly.controller;
 
-import kopo.poly.dto.BoardDTO;
-import kopo.poly.dto.UserDTO;
+import kopo.poly.dto.*;
+import kopo.poly.service.impl.AdminService;
 import kopo.poly.service.impl.UserService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.UseSha256;
@@ -10,10 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -23,16 +25,28 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    AdminService adminService;
 
     //메인화면
     @GetMapping("/main")
-    public String MainPage() {
-        log.info(this.getClass().getName() + " MainPage");
+    public String MainPage(HttpServletRequest request, Model model, Criteria nCri) throws Exception {
+        int tNo = 1;
+        if (request.getParameter("tNo") != null) {
+            log.info("열로 들어왔지롱");
+            tNo = Integer.parseInt(request.getParameter("tNo"));
+            List<NoticeDTO> nList = adminService.getNoticePaging(tNo);
+            model.addAttribute("rList", nList);
+            int result = adminService.userTotalCount(nCri);
+            PageMakeDTO noticePageMake = new PageMakeDTO(nCri, result);
+            model.addAttribute("noticePageMake", noticePageMake);
+        }
+        model.addAttribute("rList", adminService.getNoticePaging(tNo));
+        int result = adminService.noticeTotalCount(nCri);
+        PageMakeDTO noticePageMake = new PageMakeDTO(nCri, result);
+        model.addAttribute("noticePageMake", noticePageMake);
         return "/main";
     }
-
-
-
 
     //회원가입
     @GetMapping("/signUp")
@@ -44,12 +58,12 @@ public class UserController {
     @GetMapping("/myPage")
     public String Mypage() {
         log.info(this.getClass().getName() + ".SignUpForm start");
-        return "signUp/myPage";
+        return "/signUp/myPage";
     }
 
 
     @PostMapping("/signUpReg")
-    public String signUp(HttpServletRequest request) {
+    public String signUp(HttpServletRequest request, Model model) {
 
         log.info(this.getClass().getName() + ".SingUpReg start");
 
@@ -99,7 +113,8 @@ public class UserController {
 
 
         }
-        return "signUp/Login";
+        model.addAttribute("msg","회원가입이 완료되었습니다.");
+        return "/signUp/popupclose";
     }
     //아이디 중복체크
     @ResponseBody
@@ -127,7 +142,6 @@ public class UserController {
     @RequestMapping(value = "/nameCheck", method = RequestMethod.POST)
     public int nameCheck(UserDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + ".nameCheck start!");
-
         int res = userService.nameCheck(pDTO);
         log.info(String.valueOf(res));
         log.info(this.getClass().getName() + ".nameCheck end!");
