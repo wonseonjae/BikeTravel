@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.ServletContext;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionContext;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -307,7 +307,9 @@ public class ClubController {
         for (Map<String, Object> list : param) {
             String eventName = (String) list.get("title"); // 이름 받아오기
             String startDateString = (String) list.get("start");
+            log.info(startDateString);
             String endDateString = (String) list.get("end");
+            log.info(endDateString);
             LocalDateTime startDate = LocalDateTime.parse(startDateString, dateTimeFormatter);
             LocalDateTime endDate = LocalDateTime.parse(endDateString, dateTimeFormatter);
             int club_no = (Integer) list.get("club_no");

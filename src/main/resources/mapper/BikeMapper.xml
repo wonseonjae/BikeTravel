@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="kopo.poly.mapper.IBikeMapper">
+	<!-- __________________________________완주 종주소 등록__________________________________ -->
+	<!--종주 관리소 등록-->
+	<insert id="regCertificate" parameterType="BikeCertificateDTO">
+		<selectKey keyProperty="REQ_SEQ" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(REG_SEQ+1),1) FROM BIKECERTIFICATE
+		</selectKey>
+		insert into BIKECERTIFICATE values (#{reg_seq}, #{user_no}, #{certificate}, #{reg_dt})
+	</insert>
+
+	<!--종주 관리소 등록값 호출-->
+	<select id="getCertificate" resultType="BikeCertificateDTO">
+		select * from BIKECERTIFICATE where USER_NO=#{user_no}
+	</select>
+
+	<!-- __________________________종주코스 별점 후기________________________________ -->
+	<!--종주 관리소 등록-->
+	<insert id="insertReview" parameterType="CourseReviewDTO">
+		<selectKey keyProperty="distance_no" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(DISTANCE_NO+1),1) FROM COURSEREVIEW
+		</selectKey>
+		insert into COURSEREVIEW values (#{distance_no}, #{user_no}, #{text},  #{starpoint}, #{reg_dt}, #{course_name})
+	</insert>
+
+	<select id="selectReview" parameterType="CourseReviewDTO" resultType="CourseReviewDTO">
+		select C.DISTANCE_NO, C.TEXT, C.STARPOINT, C.REG_DT, C.USER_NO, U.USER_NAME
+		from COURSEREVIEW C, USER_INFO U
+		WHERE C.COURSE_NAME=#{course_name} and C.USER_NO = U.USER_NO
+		order by C.DISTANCE_NO asc
+	</select>
+	<!-- 댓글 수정 쿼리-->
+	<update id="updateReview" parameterType="CourseReviewDTO">
+		update COURSEREVIEW set TEXT=#{text}, REG_DT=#{reg_dt}, STARPOINT=#{starpoint} where DISTANCE_NO=#{distance_no}
+	</update>
+
+	<delete id="deleteReview" parameterType="CourseReviewDTO">
+		delete
+		from COURSEREVIEW
+		where DISTANCE_NO = #{distance_no};
+	</delete>
+
+	<!-- __________________________________내가 탄 자전거 거리 등록__________________________________ -->
+	<insert id="insertDistance" parameterType="BikeDistanceDTO">
+		<selectKey keyProperty="reg_no" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(REG_NO+1),1) FROM BIKEDISTANCE
+		</selectKey>
+		insert into BIKEDISTANCE values (#{reg_no}, #{startdate}, #{enddate}, #{distance}, #{user_no})
+	</insert>
+
+	<select id="selectDistance" parameterType="BikeDistanceDTO" resultType="BikeDistanceDTO">
+		select C.REG_NO, C.STARTDATE, C.ENDDATE, C.DISTANCE, C.USER_NO, U.USER_NAME
+		from BIKEDISTANCE C, USER_INFO U
+		WHERE C.USER_NO=#{user_no} and C.USER_NO = U.USER_NO
+		order by C.reg_NO asc
+	</select>
+</mapper>

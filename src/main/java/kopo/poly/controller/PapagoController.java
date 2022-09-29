@@ -35,5 +35,19 @@ public class PapagoController {
         return rDTO;
     }
 
+    @GetMapping(value = "translate")
+    public PapagoDTO translate(HttpServletRequest request) throws Exception{
+        String text = CmmUtil.nvl(request.getParameter("text"));
+        PapagoDTO pDTO = new PapagoDTO();
+        pDTO.setText(text);
+
+        PapagoDTO rDTO = papagoService.translate(pDTO);
+
+        if (rDTO == null){
+            rDTO = new PapagoDTO();
+        }
+        return rDTO;
+    }
+
 
 }

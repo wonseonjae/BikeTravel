@@ -13,4 +13,8 @@ public class PapagoDTO {
 
     private String langCode;
     private String text;
+
+    private String translatedText;
+    private String scrLangType;
+    private String tarLangType;
 }

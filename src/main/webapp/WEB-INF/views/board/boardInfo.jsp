@@ -128,10 +128,10 @@
 		}
 
 		function doEdit() {
-			if ("<%=edit%>" == 2) {
+			if ("<%=edit%>" === 2) {
 				location.href = "/board/boardEditInfo?nSeq=<%=CmmUtil.nvl(String.valueOf(rDTO.getBoard_no()))%>";
 
-			} else if ("<%=edit%>" == 3) {
+			} else if ("<%=edit%>" === 3) {
 				alert("로그인 하시길 바랍니다.");
 
 			} else {

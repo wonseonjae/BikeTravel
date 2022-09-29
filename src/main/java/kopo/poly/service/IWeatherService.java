@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface IWeatherService {
-    List<WeatherDTO> getArea(Map<String, String> params);
 
-    WeatherDTO getCoordinate(WeatherDTO pDTO);
+    String apiURL = "https://api.openweathermap.org/data/3.0/onecall";
+    WeatherDTO getWeather(WeatherDTO pDTO) throws Exception;
 
-    WeatherDTO getArea(WeatherDTO pDTO);
+
 }

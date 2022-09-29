@@ -33,6 +33,9 @@
 			}else{
 			}
 		}
+		function goCertificate(){
+			location.href = "/course/certificateRegForm?checkPoint=<%=rDTO.getCheckPoint()%>"+"&address=<%=rDTO.getAddress()%>"
+		}
 
 	</script>
 </head>
@@ -67,10 +70,10 @@
 				};
 
 		// 지도를 생성합니다
-		var map = new kakao.maps.Map(mapContainer, mapOption);
+		let map = new kakao.maps.Map(mapContainer, mapOption);
 
 		// 주소-좌표 변환 객체를 생성합니다
-		var geocoder = new kakao.maps.services.Geocoder();
+		let geocoder = new kakao.maps.services.Geocoder();
 
 		// 주소로 좌표를 검색합니다
 		geocoder.addressSearch('<%=rDTO.getAddress()%>', function(result, status) {
@@ -97,6 +100,12 @@
 			}
 		});
 	</script>
+	<div class="row flex-nowrap justify-content-between align-items-center">
+		<div style="font-size: 18px" class="col-4 pt-1">
+			<a class="link-secondary" onclick="goCertificate()">종주소 완주등록</a>
+
+		</div>
+	</div>
 	<div style="max-height: 1000px" class="row mb-2">
 		<div style="height: 40%" class="col-md-12">
 			<div style="height: 40%" class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">

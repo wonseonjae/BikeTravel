@@ -298,7 +298,7 @@ public class CourseMapper extends AbstractMongoDBComon implements ICourseMapper 
     }
 
     @Override
-    public int insertCertificate(CertificationDTO pDTO, String colNm) throws Exception {
+    public void insertCertificate(CertificationDTO pDTO, String colNm) throws Exception {
         log.info(this.getClass().getName() + ".insertCertificate Start!");
 
         int res = 0;
@@ -325,11 +325,10 @@ public class CourseMapper extends AbstractMongoDBComon implements ICourseMapper 
 
         log.info(this.getClass().getName() + ".insertCertificate End!");
 
-        return res;
     }
 
     @Override
-    public int insertCourse(CourseDTO pDTO, String colNm) throws Exception {
+    public void insertCourse(CourseDTO pDTO, String colNm) throws Exception {
         log.info(this.getClass().getName() + ".insertCourse Start!");
 
         int res = 0;
@@ -357,7 +356,6 @@ public class CourseMapper extends AbstractMongoDBComon implements ICourseMapper 
 
         log.info(this.getClass().getName() + ".insertCourse End!");
 
-        return res;
     }
 
 }

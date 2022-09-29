@@ -54,9 +54,9 @@ public class ChatController {
         log.info(chatMessage.getRoomId());
         headerAccessor.getSessionAttributes().put("roomname",chatMessage.getRoomId());
         List<ChatMessage> rList = chatService.fetchChat(chatMessage.getRoomId());
-        for (int i = 0; i < rList.size(); i++) {
-            chatMessage = rList.get(i);
-            simpMessagingTemplate.convertAndSend("/topic/"+chatMessage.getRoomId(),
+        for (ChatMessage message : rList) {
+            chatMessage = message;
+            simpMessagingTemplate.convertAndSend("/topic/" + chatMessage.getRoomId(),
                     chatMessage);
         }
     }

@@ -1,6 +1,7 @@
 package kopo.poly.controller;
 
 import kopo.poly.dto.*;
+import kopo.poly.service.IBIkeService;
 import kopo.poly.service.impl.AdminService;
 import kopo.poly.service.impl.UserService;
 import kopo.poly.util.CmmUtil;
@@ -27,6 +28,9 @@ public class UserController {
     UserService userService;
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    IBIkeService bikeService;
 
     //메인화면
     @GetMapping("/main")
@@ -56,8 +60,17 @@ public class UserController {
     }
 
     @GetMapping("/myPage")
-    public String Mypage() {
-        log.info(this.getClass().getName() + ".SignUpForm start");
+    public String Mypage(HttpSession session, Model model) throws Exception {
+        /*log.info(this.getClass().getName() + ".SignUpForm start");
+        UserDTO uDTO = (UserDTO) session.getAttribute("user");
+        BikeDistanceDTO dDTO = new BikeDistanceDTO();
+        dDTO.setUser_no(uDTO.getUser_no());
+        BikeCertificateDTO cDTO = new BikeCertificateDTO();
+        cDTO.setUser_no(uDTO.getUser_no());
+        List<BikeCertificateDTO> cList = bikeService.selectCertificate(cDTO);
+        List<BikeDistanceDTO> dList = bikeService.selectDistance(dDTO);
+        model.addAttribute("cList", cList);
+        model.addAttribute("dList", dList);*/
         return "/signUp/myPage";
     }
 

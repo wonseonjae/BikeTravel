@@ -1,8 +1,7 @@
 package kopo.poly.controller;
 
-import kopo.poly.dto.CertificationDTO;
-import kopo.poly.dto.CourseDTO;
-import kopo.poly.dto.ImageDTO;
+import kopo.poly.dto.*;
+import kopo.poly.service.IBIkeService;
 import kopo.poly.service.impl.CourseService;
 import kopo.poly.service.impl.ImageService;
 import kopo.poly.service.impl.S3Service;
@@ -13,13 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.ArrayList;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +33,9 @@ public class CourseController {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private IBIkeService bikeService;
+
     @GetMapping(value = "/course/index")
     public String courseIndex(Model model) throws Exception {
         List<CourseDTO> rList = courseService.getCourse();
@@ -46,17 +46,24 @@ public class CourseController {
     }
 
     @GetMapping(value = "/course/courseDetail")
-    public String courseDetail(HttpServletRequest request, Model model) throws Exception {
+    public String courseDetail(HttpServletRequest request, HttpSession session, Model model) throws Exception {
         String coursename = CmmUtil.nvl(request.getParameter("coursename"));
         log.info(coursename);
         CourseDTO pDTO = new CourseDTO();
         pDTO.setCourseName(coursename);
         ImageDTO iDTO = new ImageDTO();
         iDTO.setCoursename(coursename);
+        CourseReviewDTO bDTO = new CourseReviewDTO();
+        bDTO.setCourse_name(coursename);
         CourseDTO rDTO = courseService.getCourseByName(coursename);
         ImageDTO mDTO = imageService.getImg(iDTO);
+        List<CourseReviewDTO> rList = bikeService.selectReview(bDTO);
+        UserDTO uDTO = (UserDTO) session.getAttribute("user");
+
         model.addAttribute("rDTO", rDTO);
         model.addAttribute("iDTO",mDTO);
+        model.addAttribute("rList", rList);
+        model.addAttribute("uDTO",uDTO);
         return "/course/courseDetail";
     }
 
@@ -72,6 +79,7 @@ public class CourseController {
         model.addAttribute("msg", "인증소 삭제가 완료되었습니다.");
         return "/course/MsgToIndex";
     }
+
 
     @GetMapping(value = "/course/certificateDetail")
     public String certificationDetail(HttpServletRequest request, Model model) throws Exception {
@@ -90,6 +98,16 @@ public class CourseController {
         courseService.deleteCertification(checkPoint);
         model.addAttribute("msg", "인증소 삭제가 완료되었습니다.");
         return "/course/MsgToIndex";
+    }
+    @GetMapping(value = "/course/certificateRegForm")
+    public String certificateRegForm(HttpServletRequest request, Model model) throws Exception {
+        String checkPoint = CmmUtil.nvl(request.getParameter("checkPoint"));
+        String address = CmmUtil.nvl(request.getParameter("address"));
+        log.info(checkPoint);
+        log.info(address);
+        model.addAttribute("checkPoint", checkPoint);
+        model.addAttribute("address",address);
+        return "/course/certificateReg";
     }
 
     @GetMapping(value = "/course/courseForm")

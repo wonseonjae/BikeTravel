@@ -2,7 +2,6 @@ package kopo.poly.mapper;
 
 import kopo.poly.dto.CertificationDTO;
 import kopo.poly.dto.CourseDTO;
-import kopo.poly.dto.ImageDTO;
 
 import java.util.List;
 
@@ -20,7 +19,9 @@ public interface ICourseMapper {
 
     int deleteCertification(String pColNm, String pSinger) throws Exception;
 
-    int insertCourse(CourseDTO pDTO, String colNm) throws Exception;
+    void insertCourse(CourseDTO pDTO, String colNm) throws Exception;
 
-    int insertCertificate(CertificationDTO pDTO, String colNm) throws Exception;
+    void insertCertificate(CertificationDTO pDTO, String colNm) throws Exception;
+
+
 }

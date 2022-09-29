@@ -56,6 +56,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
     <!-- Core theme CSS (includes Bootstrap)-->
+    <script src="/js/fullcalendar.js"></script>
     <link href="/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="/css/fullcalendar.css" rel="stylesheet"/>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -149,7 +150,6 @@
             font-size: 14px;
         }
     </style>
-    <script src="/js/fullcalendar.js"></script>
     <script src="/js/ko.js"></script>
     <script>
         //-------------------------------------------------------------------------------------------------
@@ -162,7 +162,6 @@
                     dataType: "json"
                 });
                 request.done(function (data) {
-                    console.log(data); // log 로 데이터 찍어주기.
                     var calendarEl = document.getElementById('calendar');
                     var calendar = new FullCalendar.Calendar(calendarEl, {
                         initialView: 'dayGridMonth',
@@ -195,17 +194,15 @@
                                 })
                             }
 
-                            console.log(arg);
-
                             var events = new Array(); // Json 데이터를 받기 위한 배열 선언
                             var obj = new Object();     // Json 을 담기 위해 Object 선언
                             obj.title = title; // 이벤트 명칭  ConsoleLog 로 확인 가능.
                             obj.start = arg.start; // 시작
+                            console.log(arg.start)
                             obj.end = arg.end; // 끝
+                            console.log(arg.end)
                             obj.club_no = <%=rDTO.getClub_no()%>
                             events.push(obj);
-                            var jsondata = JSON.stringify(events);
-                            console.log(jsondata);
                             $(function saveData(jsondata) {
                                 $.ajax({
                                     url: "/club/insertCalendar",
