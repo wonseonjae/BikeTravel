@@ -34,7 +34,7 @@
 			}
 		}
 		function goCertificate(){
-			location.href = "/course/certificateRegForm?checkPoint=<%=rDTO.getCheckPoint()%>"+"&address=<%=rDTO.getAddress()%>"
+			location.href = "/course/certificateRegForm?checkPoint=<%=rDTO.getCheckPoint()%>"+"&address=<%=rDTO.getAddress()%>"+"&coursename=<%=rDTO.getCourseName()%>"
 		}
 
 	</script>

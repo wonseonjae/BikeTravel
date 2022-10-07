@@ -45,6 +45,12 @@ public class CourseController {
         return "course/indexPage";
     }
 
+    @GetMapping(value = "/course/bikeRental")
+    public String bikeRental(){
+
+        return "/course/bikeRental";
+    }
+
     @GetMapping(value = "/course/courseDetail")
     public String courseDetail(HttpServletRequest request, HttpSession session, Model model) throws Exception {
         String coursename = CmmUtil.nvl(request.getParameter("coursename"));
@@ -103,10 +109,12 @@ public class CourseController {
     public String certificateRegForm(HttpServletRequest request, Model model) throws Exception {
         String checkPoint = CmmUtil.nvl(request.getParameter("checkPoint"));
         String address = CmmUtil.nvl(request.getParameter("address"));
+        String coursename = CmmUtil.nvl(request.getParameter("coursename"));
         log.info(checkPoint);
         log.info(address);
         model.addAttribute("checkPoint", checkPoint);
         model.addAttribute("address",address);
+        model.addAttribute("coursename", coursename);
         return "/course/certificateReg";
     }
 

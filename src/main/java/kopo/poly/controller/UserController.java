@@ -2,8 +2,11 @@ package kopo.poly.controller;
 
 import kopo.poly.dto.*;
 import kopo.poly.service.IBIkeService;
+import kopo.poly.service.IWeatherService;
 import kopo.poly.service.impl.AdminService;
+import kopo.poly.service.impl.CourseService;
 import kopo.poly.service.impl.UserService;
+import kopo.poly.service.impl.WeatherService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.UseSha256;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -23,6 +27,12 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class UserController {
+
+    @Autowired
+    private CourseService courseService;
+
+    @Resource(name = "WeatherService")
+    private IWeatherService weatherService;
 
     @Autowired
     UserService userService;
@@ -47,6 +57,7 @@ public class UserController {
         }
         model.addAttribute("rList", adminService.getNoticePaging(tNo));
         int result = adminService.noticeTotalCount(nCri);
+        List<BikeRentalDTO> rList = weatherService.getBikeRental();
         PageMakeDTO noticePageMake = new PageMakeDTO(nCri, result);
         model.addAttribute("noticePageMake", noticePageMake);
         return "/main";
@@ -61,16 +72,18 @@ public class UserController {
 
     @GetMapping("/myPage")
     public String Mypage(HttpSession session, Model model) throws Exception {
-        /*log.info(this.getClass().getName() + ".SignUpForm start");
+        log.info(this.getClass().getName() + ".SignUpForm start");
         UserDTO uDTO = (UserDTO) session.getAttribute("user");
         BikeDistanceDTO dDTO = new BikeDistanceDTO();
         dDTO.setUser_no(uDTO.getUser_no());
         BikeCertificateDTO cDTO = new BikeCertificateDTO();
         cDTO.setUser_no(uDTO.getUser_no());
         List<BikeCertificateDTO> cList = bikeService.selectCertificate(cDTO);
+        List<CertificationDTO> rList = courseService.getCertification();
         List<BikeDistanceDTO> dList = bikeService.selectDistance(dDTO);
+
         model.addAttribute("cList", cList);
-        model.addAttribute("dList", dList);*/
+        model.addAttribute("rList", rList);
         return "/signUp/myPage";
     }
 

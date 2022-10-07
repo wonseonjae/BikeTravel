@@ -1,6 +1,7 @@
 
 /* classes attached to <body> */
 
+
 .fc-not-allowed,
 .fc-not-allowed .fc-event { /* override events' custom cursors */
   cursor: not-allowed;

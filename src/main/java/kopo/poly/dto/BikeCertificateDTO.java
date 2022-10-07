@@ -9,5 +9,6 @@ public class BikeCertificateDTO {
     private int reg_seq;
     private int user_no;
     private String certificate;
+    private String coursename;
     private String reg_dt;
 }

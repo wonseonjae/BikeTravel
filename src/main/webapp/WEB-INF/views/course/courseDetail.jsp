@@ -206,7 +206,7 @@
 		}
 		const drawStar = (target) => {
 			console.log('${target.value}')
-			document.querySelector(`.star span`).style.width = target.value * 2.5  + '%';
+			document.querySelector(`.star span`).style.width = target.value * 3  + '%';
 			document.getElementById("point").value = Math.round(target.value / 2);
 		}
 		const updateStar = (target) => {

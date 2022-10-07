@@ -1,5 +1,6 @@
 package kopo.poly.controller;
 
+import kopo.poly.dto.BikeRentalDTO;
 import kopo.poly.dto.WaitDTO;
 import kopo.poly.dto.WeatherDTO;
 import kopo.poly.service.IWeatherService;
@@ -52,6 +53,13 @@ public class WeatherController {
         }
 
         return rDTO;
+    }
+
+    @GetMapping(value = "getRental")
+    public List<BikeRentalDTO> getRental() throws Exception {
+
+
+        return weatherService.getBikeRental();
     }
 
 

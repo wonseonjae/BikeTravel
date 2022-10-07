@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>기상조회</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/offcanvas.css">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3113b55ca889a7c68dfb770c6a6ff2d4&libraries=services"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/bootstrap.js"></script>
@@ -18,6 +20,30 @@
             left: 15px;
             padding:2px;
         }
+        .search-box {
+            /* 생략 */
+            background-color: #949BA0;
+            height: 65px;
+            padding: 10px;
+        }
+        .search-txt {
+            width: 90%;
+            border: 1px solid #bbb;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+        .search-btn {
+            color: #EDEDED;
+            float: right;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
     </style>
     <script>
@@ -28,14 +54,13 @@
             document.getElementById(day).style.display = "none";
         }
         function getWeather(x, y, name){
-            $('#daily_weather').empty();
-            $('#daily_button').empty();
-            $('#daily_button').append("<div><b>" + name + " 날씨</b><div></div>")
+            $('#cityName').empty()
+            $('#cityName').append("<h1 class=\"h6 mb-0 text-white lh-1\">"+ name +" 날씨</h1>")
+            $("#weatherForm").empty()
         $(document).ready(function (){
             console.log(x)
             console.log(y)
             console.log(name)
-
                 $.ajax({
                     url: "/weather/getWeather",
                     type: "get",
@@ -47,7 +72,6 @@
                     success: function (json){
                         $("#currentTemp").append(json.currentTemp);
                         const dailyList = json.dailyList;
-
                         for (const daily of dailyList) {
                             let day = daily.day
                             let sunrise = daily.sunrise
@@ -55,31 +79,105 @@
                             let dayTempMax = daily.dayTempMax
                             let dayTempMin = daily.dayTempMin
                             let uvi = daily.uvi
-                            let pop = daily.pop*100
+                            let pop = (daily.pop*100).toFixed();
                             let wind = daily.wind
                             let humidity = daily.humidity
                             let icon = daily.icon
                             let description = daily.description
                             let iconUrl = "http://openweathermap.org/img/wn/" + icon + "@2x.png"
                             let result = day.replace(/-/gi, "a")
-
-
-                            $("#daily_button").append("<button onmouseover='dayWeather(\""+result+"\")' onmouseout='dayWeatherOut(\""+result+"\")'>" + day + "</button>");
-                            $("#daily_weather").append("<div style='display: none' id="+result+">"+"<span>"+day+"</span>"+"<img src='"+iconUrl+"'/>"+"<span>"+ description +"</span>"+"<span>일출 : " +sunrise+"</span>"+"<span>일몰 : " +sunset+"</span>"
-                                +"<span>최고 기온 : " +dayTempMax+"℃"+"</span>"+"<span>최저 기온 : " +dayTempMin+"℃"+"</span>"+"<span>강수확률 : " +pop+"%"+ " </span>"+"<span>습도 : " +humidity+"%"+"</span>"
-                                +"<span>자외선 지수 : " +uvi+"</span>"+"<span>풍속 : " +wind+"m/s"+"</span></div>"+"<br/><br/>");
-
+                            $("#weatherForm").append(
+                                    "<h3> "+day+" </h3><br/>"
+                                    +"<div class=\"d-flex text-muted pt-3\">"
+                                        +"<div className=\"pb-3 mb-0 small lh-sm border-bottom w-100\">"
+                                            +"<div style='text-align: center;padding-right: 30px'  className=\"justify-content-between\">"
+                                                +"<img style='width: 64px; height: 64px' src='"+iconUrl+"'/>"
+                                                +"<br/><h6 style='text-align: center' class=\"text-gray-dark\">"+ description +"</h6>"
+                                            +"</div>"
+                                        +"</div>&nbsp;"
+                                        +"<div className=\"pb-3 mb-0 small lh-sm border-bottom w-100\">"
+                                            +"<div style='text-align: center;padding-right: 30px' className=\"justify-content-between\">"
+                                                +"<img style='width: 64px; height: 64px' src='/image/sunrise.png'/>"
+                                                +"<br/><h5 class=\"text-gray-dark\">일출  " +sunrise + "</h5>"
+                                            +"</div>"
+                                        +"</div>"
+                                        +"<div style='padding-right: 30px' className=\"pb-3 mb-0 small lh-sm border-bottom w-100\">"
+                                            +"<div style='text-align: center' className=\"justify-content-between\">"
+                                                +"<img style='width: 64px; height: 64px' src='/image/sunset.png'/>"
+                                                +"<br/><h5 class=\"text-gray-dark\">일몰  " +sunset+ "</h5>"
+                                            +"</div>"
+                                        +"</div>"
+                                        +"<div style='padding-right: 30px' className=\"pb-3 mb-0 small lh-sm border-bottom w-100\">"
+                                            +"<div style='text-align: center' className=\"justify-content-between\">"
+                                                +"<img style='width: 64px; height: 64px' src='/image/temp.png'/>"
+                                                +"<br/><h5 class=\"text-gray-dark\">최저℃  " +dayTempMin+ "℃"+"</h5>"
+                                            +"</div>"
+                                        +"</div>"
+                                        +"<div style='padding-right: 30px' className=\"pb-3 mb-0 small lh-sm border-bottom w-100\">"
+                                            +"<div style='text-align: center' className=\"justify-content-between\">"
+                                                +"<img style='width: 64px; height: 64px' src='/image/temp.png'/>"
+                                                +"<br/><h5 class=\"text-gray-dark\">최고℃  " +dayTempMax+ "℃"+"</h5>"
+                                            +"</div>"
+                                        +"</div>"
+                                        +"<div style='padding-right: 30px' className=\"pb-3 mb-0 small lh-sm border-bottom w-100\">"
+                                            +"<div style='text-align: center' className=\"justify-content-between\">"
+                                                +"<img style='width: 64px; height: 64px' src='/image/rain.png'/>"
+                                                +"<br/><h6 class=\"text-gray-dark\">강수확률</h6>"
+                                                +"<h4 class=\"text-gray-dark\">" +pop+ "%"+"</h4>"
+                                            +"</div>"
+                                        +"</div>"
+                                        +"<div style='padding-right: 30px' className=\"pb-3 mb-0 small lh-sm border-bottom w-100\">"
+                                            +"<div style='text-align: center' className=\"justify-content-between\">"
+                                                +"<img style='width: 64px; height: 64px' src='/image/wet.png'/>"
+                                                +"<br/><h5 class=\"text-gray-dark\">습도  " +humidity+ "%"+"</h5>"
+                                            +"</div>"
+                                        +"</div>"
+                                        +"<div style='padding-right: 30px' className=\"pb-3 mb-0 small lh-sm border-bottom w-100\">"
+                                            +"<div style='text-align: center' className=\"justify-content-between\">"
+                                                +"<img style='width: 64px; height: 64px' src='/image/uv.png'/>"
+                                                +"<br/><h5 class=\"text-gray-dark\">자외선</h5>"
+                                                +"<h4 class=\"text-gray-dark\">"+uvi+"</h4>"
+                                            +"</div>"
+                                        +"</div>"+
+                                        "<div style='padding-right: 30px' className=\"pb-3 mb-0 small lh-sm border-bottom w-100\">"
+                                            +"<div style='text-align: center' className=\"justify-content-between\">"
+                                                +"<img style='width: 64px; height: 64px' src='/image/wind.png'/>"
+                                                +"<br/><h5 class=\"text-gray-dark\">풍속" +wind+ "m/s"+"</h5>"
+                                            +"</div>"
+                                        +"</div>"
+                                    +"</div><hr/>"
+                              );
                         }
                     }
                 });
             });
 
         }
+        function searchWeather(){
+            let address = document.getElementById("searchBar").value
+            if (address===""){
+                alert('검색어를 입력해주세요')
+                return false
+            }
+            let geocoder = new kakao.maps.services.Geocoder();
+            geocoder.addressSearch(address, function(result, status) {
+                let y = result[0].y
+                let x = result[0].x
+                getWeather(x,y,address)
+            })
+            document.getElementById("container").style.display="block"
+        }
     </script>
 </head>
-<body>
-<h3>지역을 골라주세요</h3>
-<div id="map" style="width:500px;height:600px;"></div>
+<body class="bg-light">
+<nav class="navbar-expand-lg fixed-top navbar-dark" aria-label="Main navigation">
+<div class="search-box">
+    <input class="search-txt" type="text" id="searchBar" onkeypress="if (event.keyCode==13){searchWeather();}" placeholder="지역을 입력해주세요">
+    <button class="search-btn"  onclick="searchWeather()" ><img style="width: 30px;height: 30px;text-align: center" src="/image/search.jpg"/></button>
+</div>
+<br/>
+</nav>
+<div id="map" style="width:600px;height:500px;margin-left: 20%"></div>
 <script>
     let mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
@@ -256,9 +354,9 @@
     function getPoly(name, en_name){
         geocoder.addressSearch(name, function (result, status) {
             if (status === kakao.maps.services.Status.OK) {
-
                 // 결과값으로 받은 위치를 마커로 표시합니다
                 getWeather(result[0].x, result[0].y, name)
+                document.getElementById("container").style.display="block"
                 DrawSiGuPolygon(en_name)
                 getLatLng(name)
             }
@@ -266,12 +364,15 @@
     }
 
 </script>
-</hr>
-<div>
-    <div id="daily_button"></div>
+<main style="display: none" id="container" class="container">
+    <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
+        <div id="cityName" class="lh-1">
+        </div>
+    </div>
+    <div id="weatherForm" style="overflow-x: scroll" class="my-3 p-3 bg-body rounded shadow-sm">
 
-    <div id="daily_weather"></div>
-</div>
 
+    </div>
+</main>
 </body>
 </html>

@@ -17,10 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -38,11 +35,11 @@ public class BikeController {
         String checkPoint = CmmUtil.nvl(request.getParameter("checkPoint"));
         log.info(checkPoint);
         BikeCertificateDTO pDTO = new BikeCertificateDTO();
-        int user_no = (int) session.getAttribute("USER_NO");
-        log.info(String.valueOf(user_no));
+        UserDTO uDTO = (UserDTO) session.getAttribute("user");
+        log.info(String.valueOf(uDTO.getUser_no()));
         pDTO.setCertificate(checkPoint);
-        pDTO.setUser_no(user_no);
-        pDTO.setReg_dt(DateUtil.getDateTime("yyyy-MM-dd"));
+        pDTO.setUser_no(uDTO.getUser_no());
+        pDTO.setReg_dt(DateUtil.getDateTime("yyyy-MM-dd hh:mm"));
 
         bikeService.insertCertificate(pDTO);
 
@@ -130,24 +127,10 @@ public class BikeController {
         List<BikeDistanceDTO> rList = bikeService.selectDistance(pDTO);
         JSONObject jsonObj = new JSONObject();
         JSONArray jsonArr = new JSONArray();
-
         HashMap<String, Object> hash = new HashMap<>();
 
-        for (BikeDistanceDTO bikeDistanceDTO : rList) {
-            int distance = bikeDistanceDTO.getDistance();
-            if (distance >= 1000){
-                int kilo = distance / 1000;
-                int meter = distance - kilo * 1000;
 
-                hash.put("title", kilo+"Km"+meter+"m");
-                hash.put("start", bikeDistanceDTO.getStartdate());
-                hash.put("end", bikeDistanceDTO.getEnddate());
-                hash.put("time", bikeDistanceDTO.getStartdate()+" ~ "+bikeDistanceDTO.getEnddate());
-                hash.put("cal_no", bikeDistanceDTO.getReg_no());
-                jsonObj = new JSONObject(hash);
-                jsonArr.add(jsonObj);
-                return jsonArr;
-            }else {
+        for (BikeDistanceDTO bikeDistanceDTO : rList) {
                 hash.put("title", bikeDistanceDTO.getDistance()+"m");
                 hash.put("start", bikeDistanceDTO.getStartdate());
                 hash.put("end", bikeDistanceDTO.getEnddate());
@@ -155,12 +138,14 @@ public class BikeController {
                 hash.put("cal_no", bikeDistanceDTO.getReg_no());
                 jsonObj = new JSONObject(hash);
                 jsonArr.add(jsonObj);
-                return jsonArr;
-            }
-
         }
-        return jsonArr;
+            return jsonArr;
+    }
 
+    @GetMapping("/bike/getDistanceForm")
+    public String getDistanceForm(){
+
+        return "/course/getDistanceForm";
     }
 
 }

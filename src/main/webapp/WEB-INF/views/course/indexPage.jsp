@@ -38,13 +38,13 @@
             list-style: none;
             margin: 0px;
             padding: 0px;
-            max-width: 500px;
+            max-width: 80%;
             width: 100%;
         }
         ul.menubars li{
             padding: 5px 0px 5px 5px;
             margin-bottom: 5px;
-            border-bottom: 1px solid #efefef;
+            border-bottom: 1px solid black;
             font-size: 18px;
         }
         ul.menubars li:last-child{
@@ -166,6 +166,42 @@
             vertical-align: middle;
             padding: 0px 5px 6px 0px;
         }
+        ul.menubars7 li:before{
+            content: ">";
+            display: inline-block;
+            vertical-align: middle;
+            padding: 0px 5px 6px 0px;
+        }
+        ul.menubars8 li:before{
+            content: ">";
+            display: inline-block;
+            vertical-align: middle;
+            padding: 0px 5px 6px 0px;
+        }
+        ul.menubars9 li:before{
+            content: ">";
+            display: inline-block;
+            vertical-align: middle;
+            padding: 0px 5px 6px 0px;
+        }
+        ul.menubars10 li:before{
+            content: ">";
+            display: inline-block;
+            vertical-align: middle;
+            padding: 0px 5px 6px 0px;
+        }
+        ul.menubars11 li:before{
+            content: ">";
+            display: inline-block;
+            vertical-align: middle;
+            padding: 0px 5px 6px 0px;
+        }
+        ul.menubars12 li:before{
+            content: ">";
+            display: inline-block;
+            vertical-align: middle;
+            padding: 0px 5px 6px 0px;
+        }
         .btn{
             background-color: #FFFFFF;
             border-right: #1b1c1d;
@@ -217,6 +253,10 @@
         #check-btn11 { display: none; }
         #check-btn11:checked ~ .menubars11 { display: block; }
         .menubars11 {display: none; }
+
+        #check-btn12 { display: none; }
+        #check-btn12:checked ~ .menubars12 { display: block; }
+        .menubars12 {display: none; }
 
         ul{
             list-style:none;
@@ -460,6 +500,20 @@
                 for (int i = 0; i < cList.size(); i++) {
                     CertificationDTO cDTO = cList.get(i);
                     if (Objects.equals(cDTO.getCourseName(), "한강 종주자전거길"))
+                    {
+            %>
+            <li><a href="/course/certificateDetail?checkPoint=<%=cDTO.getCheckPoint()%>"><%=cDTO.getCheckPoint()%></a></li>
+            <%}%>
+            <%}%>
+        </ul>
+        </br>
+        <input id="check-btn12" type="checkbox" />
+        <label for="check-btn12">한국폴리텍 강서캠퍼스</label><hr>
+        <ul class="menubars12">
+            <%
+                for (int i = 0; i < cList.size(); i++) {
+                    CertificationDTO cDTO = cList.get(i);
+                    if (Objects.equals(cDTO.getCourseName(), "한국폴리텍 강서캠퍼스"))
                     {
             %>
             <li><a href="/course/certificateDetail?checkPoint=<%=cDTO.getCheckPoint()%>"><%=cDTO.getCheckPoint()%></a></li>
