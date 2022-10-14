@@ -82,8 +82,6 @@
                         <option value="naver.com">naver.com</option>
                     </select>
                 </div>
-
-
                 <button class="w3-button w3-block w3-black w3-ripple w3-margin-top w3-round" type="submit">찾기</button>
             </div>
 

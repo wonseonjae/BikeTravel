@@ -37,6 +37,8 @@
     <orderEntry type="library" name="sockjs-client" level="application" />
     <orderEntry type="library" name="stomp.js" level="application" />
     <orderEntry type="library" name="jqueryui" level="application" />
+    <orderEntry type="library" name="postcode.v2" level="application" />
+    <orderEntry type="library" name="moment.js" level="application" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.6.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.6.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.6.3" level="project" />
@@ -161,7 +163,5 @@
     <orderEntry type="library" name="Maven: io.netty:netty-transport:4.1.73.Final" level="project" />
     <orderEntry type="library" name="Maven: io.projectreactor:reactor-core:3.4.14" level="project" />
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.3" level="project" />
-    <orderEntry type="library" name="postcode.v2" level="application" />
-    <orderEntry type="library" name="moment.js" level="application" />
   </component>
 </module>

@@ -68,7 +68,7 @@
             <input type="password" name="userpwd" id="userpwd" class="form-control" placeholder="Password" required><br>
             <div class="checkbox">
                 <label>
-                   &nbsp;<a onclick="window.open('/signUp','회원가입페이지','height=800, width=650 location=no resizable=no')">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="window.open('/findIdPw','회원가입페이지','height=300, width=600 location=center')">아이디&nbsp;|&nbsp;비밀번호찾기</a>
+                   &nbsp;<a onclick="window.open('/signUp','회원가입페이지','height=800, width=650 location=no resizable=no')">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="window.open('/findIdPw','회원가입페이지','height=600, width=800 location=center')">아이디&nbsp;|&nbsp;비밀번호찾기</a>
                 </label>
             </div>
             <button id="btn-Yes" class="btn btn-lg btn-primary btn-block" type="submit">로 그 인</button>
@@ -76,7 +76,6 @@
 
     </div>
 </div>
-
 <div class="modal">
 </div>
 <!-- Optional JavaScript -->

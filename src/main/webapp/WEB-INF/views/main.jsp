@@ -121,7 +121,7 @@
       </script>
    <style type="text/css">
       body{
-         padding-top: 85px;
+         padding-top: 70px;
       }
       ul, li{
          list-style:none;
@@ -221,6 +221,7 @@
    </style>
 </head>
 <body>
+<header>
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
    <a class="navbar-brand" href="/main"><img src="/image/bike.jpg" height="35" width="35">자전거여행</a>
    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
@@ -253,9 +254,12 @@
       </form>
    </div>
 </nav>
+</header>
 <main role="main">
    <div class="jumbotron" style="height: 300px; background-color: #a1b4af">
       <div class="container">
+         <br/>
+         <br/>
          <h1 class="display-3">자전거 여행</h1>
          <br>
          <h4>전국 자전거 코스 한눈에 알아보기</h4>
@@ -267,11 +271,11 @@
       <br/>
    </div>
 
-      <div class="row" style="margin-left: 20%; margin-right: 10%">
+      <div class="row" style="margin-left: 10%; margin-right: 10%">
          <div class="col-md-2">
             <h2>코스조회</h2>
             <p>종주코스, 테마코스를 확인해보세요</p>
-            <p><a class="btn btn-secondary" onclick="window.open('/course/index','코스조회','width=600 height=800')" role="button">바로가기 &raquo;</a></p>
+            <p><a class="btn btn-secondary" onclick="window.open('/course/index','코스조회','width=650 height=800')" role="button">바로가기 &raquo;</a></p>
          </div>
          <div class="col-md-2">
             <h2>후기게시판</h2>

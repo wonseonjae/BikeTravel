@@ -2,6 +2,7 @@ package kopo.poly.controller;
 
 import kopo.poly.dto.*;
 import kopo.poly.service.IBIkeService;
+import kopo.poly.service.ICourseService;
 import kopo.poly.util.CmmUtil;
 import kopo.poly.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,31 @@ public class BikeController {
 
     @Autowired
     private IBIkeService bikeService;
+
+    @Autowired
+    private ICourseService courseService;
+
+    @GetMapping("/bike/stampBook")
+    public String stampBook(HttpServletRequest request, Model model, HttpSession session) throws Exception{
+
+        log.info(this.getClass().getName() + ".SignUpForm start");
+        String courseName = request.getParameter("courseName");
+        log.info(courseName);
+        UserDTO uDTO = (UserDTO) session.getAttribute("user");
+        BikeDistanceDTO dDTO = new BikeDistanceDTO();
+        dDTO.setUser_no(uDTO.getUser_no());
+        BikeCertificateDTO cDTO = new BikeCertificateDTO();
+        cDTO.setUser_no(uDTO.getUser_no());
+        List<BikeCertificateDTO> cList = bikeService.selectCertificate(cDTO);
+        List<CertificationDTO> rList = courseService.getCertification();
+
+        model.addAttribute("cList", cList);
+        model.addAttribute("rList", rList);
+        model.addAttribute("courseName", courseName);
+
+        return "/course/stampBook";
+    }
+
 
     @ResponseBody
     @GetMapping("/bike/regCertificate")

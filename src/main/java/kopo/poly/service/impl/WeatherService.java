@@ -71,8 +71,8 @@ public class WeatherService implements IWeatherService {
 
             Map<String, Double> dailyTemp = (Map<String, Double>) dailyMap.get("temp");
             String dayTemp = String.valueOf(dailyTemp.get("day"));
-            String dayTempMax = String.valueOf(dailyTemp.get("max")).substring(0,2);
-            String dayTempMin = String.valueOf(dailyTemp.get("min")).substring(0,2);
+            String dayTempMax = String.valueOf(dailyTemp.get("max"));
+            String dayTempMin = String.valueOf(dailyTemp.get("min"));
             wdDTO.setDay(day);
             wdDTO.setSunrise(sunrise);
             wdDTO.setSunset(sunset);
@@ -97,7 +97,7 @@ public class WeatherService implements IWeatherService {
 
         String apiParam = "http://api.data.go.kr/openapi/tn_pubr_public_bcycl_lend_api" + "?" + URLEncoder.encode("serviceKey", "UTF-8") + "=7EpF3TCkgMENfaz3eaLHbldfYrPuDMZRi2IEbYu1fGqnoUxT5ZB6xm28C3Xv6TB2IegtMlKzIlLLNExhFq1FsQ%3D%3D" + /*Service Key*/
                 "&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8") + /*페이지 번호*/
-                "&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("500", "UTF-8") + /*한 페이지 결과 수*/
+                "&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("1000", "UTF-8") + /*한 페이지 결과 수*/
                 "&" + URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8"); /*XML/JSON 여부*/
 
         String json = NetworkUtil.get(apiParam);

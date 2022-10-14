@@ -28,6 +28,12 @@
         }
 
     </style>
+    <script>
+        function goList(){
+            location.href="/course/index"
+        }
+
+    </script>
 </head>
 <body>
 <div style="font-size: 18px" class="container">
@@ -35,9 +41,6 @@
         <div class="row flex-nowrap justify-content-between align-items-center">
             <div style="font-size: 18px" class="col-4 pt-1">
                 <a class="link-secondary" onclick="goList()">목록으로</a>
-                <div id="test">
-
-                </div>
             </div>
         </div>
     </header>
@@ -96,14 +99,21 @@
 
 
             var coords = new kakao.maps.LatLng(latitude, longitude);
-            console.log(latitude)
-            console.log(longitude)
+            var imageSrc = '/image/bike.jpg', // 마커이미지의 주소입니다
+                imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+                imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
-            // 결과값으로 받은 위치를 마커로 표시합니다
+// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+                markerPosition = coords; // 마커가 표시될 위치입니다
+
+// 마커를 생성합니다
             var marker = new kakao.maps.Marker({
-                map: map,
-                position: coords
+                position: markerPosition,
+                image: markerImage // 마커이미지 설정
             });
+
+            // 결과값으로 받은 위치를 마커로 표시합니
             marker.setMap(map);
             map.setCenter(coords);
 
@@ -113,15 +123,24 @@
             geocoder.addressSearch('<%=address%>', function(result, status) {
                 let x = parseFloat(result[0].y)
                 let y = parseFloat(result[0].x)
-                console.log(lat.toFixed(4))
-                console.log(lon.toFixed(4))
-                console.log(lat.toFixed(4) === y.toFixed(4))
-                console.log(lon.toFixed(4) === x.toFixed(4))
+
+                var polyline=new daum.maps.Polyline({
+                    /* map:map, */
+                    path : [
+                        new daum.maps.LatLng(x,y),
+                        new daum.maps.LatLng(lat,lon)
+                    ],
+                    strokeWeight: 2,
+                    strokeColor: '#FF00FF',
+                    strokeOpacity: 0.8,
+                    strokeStyle: 'dashed'
+                });
+
+                let length = parseFloat(polyline.getLength()).toFixed()
+
+
                 $("#test").empty()
-                $("#test").append("<input type='text' disabled style='border: none' value=> 내 위치 X: " + lat.toFixed(4) + " 내위치 Y: " +lon.toFixed(4)+ "m</input>")
-                $("#test").append("<input type='text' disabled style='border: none' value=> 인증소 위치 X: " + x.toFixed(4) + " 인증소 Y: " +y.toFixed(4)+ "m</input>")
-                $("#test").append("<input type='text' disabled style='border: none' value=> 위도 비교: " + lat.toFixed(4) === y.toFixed(4) +"m</input>")
-                $("#test").append("<input type='text' disabled style='border: none' value=> 경도 비교: " + lon.toFixed(4) === x.toFixed(4) +"m</input>")
+                $("#test").append("<strong style='border: none; font-size: 24px;'> 남은 거리 : " + length +"m</strong>")
 
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
                 var marker = new kakao.maps.Marker({
@@ -160,7 +179,10 @@
             });
         }
     </script>
+        <div id="test" style="width: 100%; height: 50px; border: 3px solid black; text-align: center">
+
+
+        </div>
     </div>
-</div>
 </body>
 </html>

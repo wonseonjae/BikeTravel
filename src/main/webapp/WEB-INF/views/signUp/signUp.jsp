@@ -148,6 +148,8 @@
         function emailCheck() {
             let clientEmailId = document.getElementById('user_mailid').value;
             let clientEmailDomain = document.getElementById('user_maildomain').value;
+            console.log(clientEmailId)
+            console.log(clientEmailDomain)
             if (clientEmailDomain==="" || clientEmailId===""){
                 alert("공백없이 입력해주시기 바랍니다.");
                 return
@@ -223,64 +225,183 @@
             }
         }
     </script>
+    <style>
+        *, *:before, *:after {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: #384047;
+            padding-left: 30px;
+        }
+
+        h1 {
+            margin: 0 0 30px 0;
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        input[type="datetime"],
+        input[type="email"],
+        input[type="number"],
+        input[type="search"],
+        input[type="tel"],
+        input[type="time"],
+        input[type="url"],
+        textarea,
+        select {
+            border: none;
+            font-size: 16px;
+            height: auto;
+            margin: 0;
+            outline: 0;
+            padding: 15px;
+            width: 100%;
+            background: #e8eeef;
+            color: #8a97a0;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+            margin-bottom: 30px;
+        }
+        input[type="email"],
+        select {
+            border: none;
+            font-size: 16px;
+            height: auto;
+            margin: 0;
+            outline: 0;
+            padding: 15px;
+            width: 40%;
+            background: #e8eeef;
+            color: #8a97a0;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+            margin-bottom: 30px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin: 0 4px 8px 0;
+        }
+
+        button {
+            padding: 19px 39px 18px 39px;
+            color: #FFF;
+            background-color: #4bc970;
+            font-size: 18px;
+            text-align: center;
+            font-style: normal;
+            border-radius: 5px;
+            width: 100%;
+            border: 1px solid #3ac162;
+            border-width: 1px 1px 3px;
+            box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
+            margin-bottom: 10px;
+        }
+
+        fieldset {
+            margin-bottom: 30px;
+            border: none;
+        }
+
+        legend {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        label.light {
+            font-weight: 300;
+            display: inline;
+        }
+
+        .number {
+            background-color: #5fcf80;
+            color: #fff;
+            height: 30px;
+            width: 30px;
+            display: inline-block;
+            font-size: 0.8em;
+            margin-right: 4px;
+            line-height: 30px;
+            text-align: center;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+            border-radius: 100%;
+        }
+
+        @media screen and (min-width: 480px) {
+
+            form {
+                max-width: 480px;
+            }
+
+        }
+
+    </style>
 </head>
 <body>
 <form name="join" method="post" action="/signUpReg" onsubmit="return doSubmit(this);">
-    <div class="container">
-        <div style="border:none; border-bottom: #999999 1px">
-        <h1>회원가입</h1>
-        </div>
-        <div class="form-group">
-            <label>아이디</label>
-            <input type="text" id="user_id" class="form-control" name="user_id" placeholder="아이디">
-            <input type="hidden" class="form-control" name="idChkYN" id="idChkYN">
-            <button class="btn btn-primary" class="idChk" type="button" id="idChk" onclick="idCheck()" value="N">중복체크</button>
+<div class="row">
+    <div class="col-md-12">
+        <form action="index.html" method="post">
+            <h1> 회 원 가 입 </h1>
+            <fieldset>
+                <legend><span class="number">1</span> 내 정보</legend>
 
-        </div>
-        <div class="form-group">
-            <label>닉네임</label>
-            <input type="text" id="user_name" class="form-control" name="user_name" placeholder="닉네임">
-            <input type="hidden" class="form-control" name="nameChkYN" id="nameChkYN">
-            <button class="btn btn-primary" class="nameChk" type="button" id="nameChk" onclick="nameCheck()" value="N">중복체크</button>
-        </div>
-        <div class="form-group">
-            <label>비밀번호</label>
-            <input type="password" class="form-control" name="user_pw" id="pw" onchange="check_pw()" placeholder="비밀번호">
-        </div>
-        <div class="form-group">
-            <label>비밀번호 확인</label>
-            <input type="password" class="form-control" name="user_pw_check" id="pw2"
-                   onchange="check_pw()" placeholder="비밀번호 확인"><span id="check"></span>
-            <input type="hidden" class="form-control" name="pwChkYN" id="pwChkYN">
-        </div>
-        <div class="form-group">
-            <label>이메일 아이디</label>
-        </div>
-        <div class="form-group">
-            <input type="text" style="width:150px;height:35px;" id="user_mailid" name="user_mailid" placeholder="Email아이디" >
+                <label for="user_id">아이디:</label>
+                <input type="text" id="user_id" name="user_id" placeholder="아이디">
+                <input type="hidden" class="form-control" name="idChkYN" id="idChkYN">
+                <button class="btn btn-primary" class="idChk" type="button" id="idChk" onclick="idCheck()" value="N">중복체크</button>
 
-                <label>&nbsp;@&nbsp;</label>
 
-                <input type="text" style="width:150px;height:35px;" id="user_maildomain" name="user_maildomain" placeholder="도메인을 선택해주세요" readonly>
-                <input type="hidden" class="form-control" name="mailChkYN" id="mailChkYN">
-                    <select style="width:100px;height:35px;" name="mail3" onChange="mailCheck()">
-                    <option value="gmail.com" >gmail.com</option>
-                    <option value="naver.com">naver.com</option>
-                </select>
-            <button type="button" class="btn btn-primary" onclick="emailCheck()">중복체크</button>
-            <button type="button" class="btn btn-primary" onclick="emailSend()">발송</button>
+                <label for="user_name">닉네임:</label>
+                <input type="text" id="user_name" name="user_name" placeholder="닉네임">
+                <input type="hidden" class="form-control" name="nameChkYN" id="nameChkYN">
+                <button class="btn btn-primary" class="nameChk" type="button" id="nameChk" onclick="nameCheck()" value="N">중복체크</button>
 
-        </div>
-        <div class="form-group">
-            <label>인증번호</label>
-            <input type="text" class="form-control" name="certificationCode" id="certificationCode" placeholder="인증번호">
-            <input type="hidden" class="form-control" name="certificationYN" id="certificationYN">
-            <button type="button" class="btn btn-primary" onclick="emailCertification()">인증하기</button>
-        </div>
 
-        <button type="submit" style="width: 100%" class="btn btn-primary">가입 완료</button>
+                <label for="pw">비밀번호:</label>
+                <input type="password" name="user_pw" id="pw" onchange="check_pw()" placeholder="비밀번호">
+
+                <label for="pw2">비밀번호 확인:</label>
+                <input type="password" name="user_pw_check" id="pw2" onchange="check_pw()" placeholder="비밀번호 확인">
+                <span id="check"></span>
+                <input type="hidden" class="form-control" name="pwChkYN" id="pwChkYN">
+
+                <label for="user_mailid">이메일:</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="user_mailid" name="user_mailid" placeholder="Email아이디">
+                    <span class="input-group-text">@</span>
+                    <select style="height: 54px; background: #e8eeef;" class="form-control" name="mail3" onChange="mailCheck()">
+                        <optgroup label="Web">
+                            <option value="gmail.com">gmail.com</option>
+                            <option value="naver.com">naver.com</option>
+                        </optgroup>
+                    </select>
+                </div>
+                    <input type="hidden" class="form-control" name="mailChkYN" id="mailChkYN">
+                    <input type="hidden" style="width:150px;height:35px;" id="user_maildomain" name="user_maildomain"/>
+                    <button type="button" class="btn btn-primary" onclick="emailCheck()">중복체크</button>
+                    <button type="button" class="btn btn-primary" onclick="emailSend()">인증번호 발송</button>
+
+                <label for="pw">인증번호 :</label>
+                <input type="text" name="certificationCode" id="certificationCode" placeholder="인증번호">
+                <input type="hidden" class="form-control" name="certificationYN" id="certificationYN">
+                <button type="button" class="btn btn-primary" onclick="emailCertification()">인증하기</button>
+            </fieldset>
+
+            <button type="submit">가입</button>
+
+        </form>
     </div>
-
+</div>
 </form>
 </body>
 </html>

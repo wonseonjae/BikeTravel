@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -57,27 +59,23 @@ public class MailController {
 
     }
 
-    @PostMapping(value = "/sendPw")
-    private String sendPassword(HttpServletRequest request, Model model) throws Exception {
+    @ResponseBody
+    @GetMapping(value = "/sendPw")
+    private void sendPassword(HttpServletRequest request) throws Exception {
         log.info(this.getClass().getName() + ".sendEmail start");
         String user_id = CmmUtil.nvl(request.getParameter("user_id"));
         String user_mailid = CmmUtil.nvl(request.getParameter("user_mailid"));
         String user_maildomain = CmmUtil.nvl(request.getParameter("user_maildomain"));
         String userEmail = user_mailid+"@"+user_maildomain;
+        log.info(userEmail);
+        log.info(user_id);
         UserDTO pDTO = new UserDTO();
         pDTO.setUser_mailid(user_mailid);
         pDTO.setUser_maildomain(user_maildomain);
         pDTO.setUser_id(user_id);
 
-        if(loginService.findPwCheck(pDTO)==0) {
-            model.addAttribute("msg", "잘못된 이메일 혹은 아이디 입니다.");
-            return "/signUp/findPw";
-        }else {
-            loginService.resetPw(pDTO);
-            log.info(this.getClass().getName() + ".sendEmail end");
-            model.addAttribute("msg","비밀번호를 재발급하였습니다. 로그인 후 변경해주세요");
-            return "/signUp/popupclose";
-        }
+        loginService.resetPw(pDTO);
+
 
     }
 }

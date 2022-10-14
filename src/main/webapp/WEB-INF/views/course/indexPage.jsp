@@ -262,6 +262,384 @@
             list-style:none;
             font-size: 24px;
         }
+        .custom-btn {
+            width: 150px;
+            height: 50px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 5px;
+            padding: 10px 25px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+            7px 7px 20px 0px rgba(0,0,0,.1),
+            4px 4px 5px 0px rgba(0,0,0,.1);
+            outline: none;
+        }
+        .btn-5 {
+            width: 150px;
+            height: 50px;
+            line-height: 42px;
+            padding: 0;
+            border: none;
+            background: rgb(255,27,0);
+            background: linear-gradient(0deg, rgba(255,27,0,1) 0%, rgba(251,75,2,1) 100%);
+        }
+        .btn-5:hover {
+            color: #f0094a;
+            background: transparent;
+            box-shadow:none;
+        }
+        .btn-5:before,
+        .btn-5:after{
+            content:'';
+            position:absolute;
+            top:0;
+            right:0;
+            height:2px;
+            width:0;
+            background: #f0094a;
+            box-shadow:
+                    -1px -1px 5px 0px #fff,
+                    7px 7px 20px 0px #0003,
+                    4px 4px 5px 0px #0002;
+            transition:400ms ease all;
+        }
+        .btn-5:after{
+            right:inherit;
+            top:inherit;
+            left:0;
+            bottom:0;
+        }
+        .btn-5:hover:before,
+        .btn-5:hover:after{
+            width:100%;
+            transition:800ms ease all;
+        }
+        .btn-3 {
+            width: 150px;
+            height: 50px;
+            line-height: 42px;
+            padding: 0;
+            border: none;
+            background: skyblue;
+            background: linear-gradient(0deg, skyblue 0%, greenyellow 100%);
+        }
+        .btn-3:hover {
+            color: #f0094a;
+            background: transparent;
+            box-shadow:none;
+        }
+        .btn-3:before,
+        .btn-3:after{
+            content:'';
+            position:absolute;
+            top:0;
+            right:0;
+            height:2px;
+            width:0;
+            background: #f0094a;
+            box-shadow:
+                    -1px -1px 5px 0px #fff,
+                    7px 7px 20px 0px #0003,
+                    4px 4px 5px 0px #0002;
+            transition:400ms ease all;
+        }
+        .btn-3:after{
+            right:inherit;
+            top:inherit;
+            left:0;
+            bottom:0;
+        }
+        .btn-3:hover:before,
+        .btn-3:hover:after{
+            width:100%;
+            transition:800ms ease all;
+        }
+        .btn-4 {
+            width: 150px;
+            height: 50px;
+            line-height: 42px;
+            padding: 0;
+            border: none;
+            background: skyblue;
+            background: linear-gradient(0deg, sandybrown 0%, peachpuff 100%);
+        }
+        .btn-4:hover {
+            color: #f0094a;
+            background: transparent;
+            box-shadow:none;
+        }
+        .btn-4:before,
+        .btn-4:after{
+            content:'';
+            position:absolute;
+            top:0;
+            right:0;
+            height:2px;
+            width:0;
+            background: #f0094a;
+            box-shadow:
+                    -1px -1px 5px 0px #fff,
+                    7px 7px 20px 0px #0003,
+                    4px 4px 5px 0px #0002;
+            transition:400ms ease all;
+        }
+        .btn-4:after{
+            right:inherit;
+            top:inherit;
+            left:0;
+            bottom:0;
+        }
+        .btn-4:hover:before,
+        .btn-4:hover:after{
+            width:100%;
+            transition:800ms ease all;
+        }
+    </style>
+    <style type="text/css">
+        .transition, p, ul li i:before, ul li i:after {
+            transition: all 0.25s ease-in-out;
+        }
+
+        .flipIn, h1, ul li {
+            animation: flipdown 0.5s ease both;
+        }
+
+        .no-select, h2 {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+            perspective: 900px;
+            overflow-y: scroll;
+            background-color: #dce7eb;
+            font-family: "Titillium Web", sans-serif;
+            color: rgba(48, 69, 92, 0.8);
+        }
+
+        body {
+            min-height: 0;
+            display: inline-block;
+            position: relative;
+            left: 50%;
+            margin: 50px 0;
+            transform: translate(-50%, 0);
+            box-shadow: 0 10px 0 0 #ff6873 inset;
+            background-color: #fefffa;
+            max-width: 90%;
+            padding: 5%;
+        }
+
+        @media (max-width: 550px) {
+            body {
+                box-sizing: border-box;
+                transform: translate(0, 0);
+                max-width: 100%;
+                min-height: 100%;
+                margin: 0;
+                left: 0;
+            }
+        }
+
+        h1, h2 {
+            color: #ff6873;
+        }
+
+        h1 {
+            text-transform: uppercase;
+            font-size: 36px;
+            line-height: 42px;
+            letter-spacing: 3px;
+            font-weight: 100;
+        }
+
+        h2 {
+            font-size: 26px;
+            line-height: 34px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            display: block;
+            background-color: #fefffa;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        p {
+            color: rgba(48, 69, 92, 0.8);
+            font-size: 17px;
+            line-height: 26px;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            max-height: 800px;
+            opacity: 1;
+            transform: translate(0, 0);
+            margin-top: 14px;
+            z-index: 2;
+        }
+
+        ul {
+            list-style: none;
+            perspective: 900px;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul li {
+            position: relative;
+            padding: 0;
+            margin: 0;
+            padding-bottom: 4px;
+            padding-top: 18px;
+            border-top: 1px dotted #dce7eb;
+        }
+
+        ul li:nth-of-type(1) {
+            animation-delay: 0.5s;
+        }
+
+        ul li:nth-of-type(2) {
+            animation-delay: 0.75s;
+        }
+
+        ul li:nth-of-type(3) {
+            animation-delay: 1.0s;
+        }
+
+        ul li:nth-of-type(4) {
+            animation-delay: 1.25s;
+        }
+
+        ul li:nth-of-type(5) {
+            animation-delay: 1.5s;
+        }
+
+        ul li:nth-of-type(6) {
+            animation-delay: 1.75s;
+        }
+
+        ul li:nth-of-type(7) {
+            animation-delay: 2s;
+        }
+
+        ul li:nth-of-type(8) {
+            animation-delay: 2.25s;
+        }
+
+        ul li:nth-of-type(9) {
+            animation-delay: 2.5s;
+        }
+
+        ul li:nth-of-type(10) {
+            animation-delay: 2.75s;
+        }
+
+        ul li:nth-of-type(11) {
+            animation-delay: 3s;
+        }
+
+        ul li:nth-of-type(12) {
+            animation-delay: 3.25s;
+        }
+
+        ul li:nth-of-type(13) {
+            animation-delay: 3.5s;
+        }
+
+        ul li:nth-of-type(14) {
+            animation-delay: 3.75s;
+        }
+
+        ul li:last-of-type {
+            padding-bottom: 0;
+        }
+
+        ul li i {
+            position: absolute;
+            transform: translate(-6px, 0);
+            margin-top: 16px;
+            right: 0;
+        }
+
+        ul li i:before, ul li i:after {
+            content: "";
+            position: absolute;
+            background-color: #ff6873;
+            width: 3px;
+            height: 9px;
+        }
+
+        ul li i:before {
+            transform: translate(-2px, 0) rotate(45deg);
+        }
+
+        ul li i:after {
+            transform: translate(2px, 0) rotate(-45deg);
+        }
+
+        ul li input[type=checkbox] {
+            position: absolute;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0;
+        }
+
+        ul li input[type=checkbox]:checked ~ p {
+            margin-top: 0;
+            max-height: 0;
+            opacity: 0;
+            transform: translate(0, 50%);
+        }
+
+        ul li input[type=checkbox]:checked ~ i:before {
+            transform: translate(2px, 0) rotate(45deg);
+        }
+
+        ul li input[type=checkbox]:checked ~ i:after {
+            transform: translate(-2px, 0) rotate(-45deg);
+        }
+
+        @keyframes flipdown {
+            0% {
+                opacity: 0;
+                transform-origin: top center;
+                transform: rotateX(-90deg);
+            }
+            5% {
+                opacity: 1;
+            }
+            80% {
+                transform: rotateX(8deg);
+            }
+            83% {
+                transform: rotateX(6deg);
+            }
+            92% {
+                transform: rotateX(-3deg);
+            }
+            100% {
+                transform-origin: top center;
+                transform: rotateX(0deg);
+            }
+        }
+
     </style>
     <script>
 
@@ -289,9 +667,9 @@
 </head>
 <body>
 <div class="flex_container">
-    <button type="button" class="btn" onclick="jongjuList()">종주코스</button>
-    <button type="button" class="btn" onclick="themeList()">테마코스</button>
-    <button type="button" class="btn" onclick="certificationList()">종주인증소</button>
+    <button class="custom-btn btn-5" onclick="jongjuList()"><span>종주코스</span></button>
+    <button class="custom-btn btn-3" onclick="themeList()"><span>테마코스</span></button>
+    <button class="custom-btn btn-4" onclick="certificationList()"><span>종주인증소</span></button>
     <br>
     <br>
     <div class="flex-item" style="display: block" id="jonJu">
@@ -310,7 +688,7 @@
                     CourseDTO rDTO = rList.get(i);
                     if (Objects.equals(rDTO.getCourseDiv(), "종주코스")) {
             %>
-            <li><a href="/course/courseDetail?coursename=<%=rDTO.getCourseName()%>"><%=rDTO.getCourseName()%></a></li><hr>
+            <li><a href="/course/courseDetail?coursename=<%=rDTO.getCourseName()%>"><%=rDTO.getCourseName()%></a></li>
             <%}%>
             <%}%>
         </ul>
@@ -331,7 +709,7 @@
                     CourseDTO rDTO = rList.get(i);
                     if (Objects.equals(rDTO.getCourseDiv(), "테마코스")) {
             %>
-            <a href="/course/courseDetail?coursename=<%=rDTO.getCourseName()%>"><%=rDTO.getCourseName()%></a><hr>
+            <a href="/course/courseDetail?coursename=<%=rDTO.getCourseName()%>"><%=rDTO.getCourseName()%></a>
             <%}%>
             <%}%>
         </ul>
@@ -347,7 +725,7 @@
             }
         %>
         <input id="check-btn" type="checkbox"/>
-        <label for="check-btn">금강 종주자전거길</label><hr>
+        <label for="check-btn">금강 종주자전거길</label><hr/>
         <ul class="menubars" style="margin-top: 0">
             <%
                 for (int i = 0; i < cList.size(); i++) {
@@ -360,7 +738,6 @@
 
             <%}%>
         </ul>
-        </br>
         <input id="check-btn2" type="checkbox" />
         <label for="check-btn2">낙동강 종주자전거길</label><hr>
         <ul class="menubars2">
@@ -375,7 +752,6 @@
 
             <%}%>
         </ul>
-        <br>
         <input id="check-btn3" type="checkbox" />
         <label for="check-btn3">동해안(강원) 자전거길</label><hr>
         <ul class="menubars3">
@@ -388,7 +764,7 @@
             <li><a href="/course/certificateDetail?checkPoint=<%=cDTO.getCheckPoint()%>"><%=cDTO.getCheckPoint()%></a></li>
             <%}%>
             <%}%>
-        </ul><br>
+        </ul>
         <input id="check-btn4" type="checkbox" />
         <label for="check-btn4">북한강 종주자전거길</label><hr>
         <ul class="menubars4">
@@ -402,7 +778,7 @@
             <%}%>
 
             <%}%>
-        </ul><br>
+        </ul>
         <input id="check-btn5" type="checkbox" />
         <label for="check-btn5">새재 종주자전거길</label><hr>
         <ul class="menubars5">
@@ -416,7 +792,7 @@
             <%}%>
 
             <%}%>
-        </ul><br>
+        </ul>
 
         <input id="check-btn6" type="checkbox" />
         <label for="check-btn6">섬진강 종주자전거길</label><hr>
@@ -431,7 +807,7 @@
             <%}%>
 
             <%}%>
-        </ul></br>
+        </ul>
 
         <input id="check-btn7" type="checkbox" />
         <label for="check-btn7">아라 종주자전거길</label><hr>
@@ -446,7 +822,7 @@
             <%}%>
 
             <%}%>
-        </ul></br>
+        </ul>
 
         <input id="check-btn8" type="checkbox" />
         <label for="check-btn8">영산강 종주자전거길</label><hr>
@@ -461,7 +837,7 @@
             <%}%>
 
             <%}%>
-        </ul></br>
+        </ul>
 
         <input id="check-btn9" type="checkbox" />
         <label for="check-btn9">오천자전거길</label><hr>
@@ -476,7 +852,7 @@
             <%}%>
 
             <%}%>
-        </ul></br>
+        </ul>
 
         <input id="check-btn10" type="checkbox" />
         <label for="check-btn10">제주환상자전거길</label><hr>
@@ -491,7 +867,7 @@
             <%}%>
 
             <%}%>
-        </ul></br>
+        </ul>
 
         <input id="check-btn11" type="checkbox" />
         <label for="check-btn11">한강 종주자전거길</label><hr>
@@ -506,7 +882,7 @@
             <%}%>
             <%}%>
         </ul>
-        </br>
+
         <input id="check-btn12" type="checkbox" />
         <label for="check-btn12">한국폴리텍 강서캠퍼스</label><hr>
         <ul class="menubars12">
@@ -520,7 +896,6 @@
             <%}%>
             <%}%>
         </ul>
-        </br>
     </div>
 </div>
 </body>

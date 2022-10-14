@@ -47,12 +47,6 @@
 
     </style>
     <script>
-        function dayWeather(day){
-            document.getElementById(day).style.display = "block";
-        }
-        function dayWeatherOut(day){
-            document.getElementById(day).style.display = "none";
-        }
         function getWeather(x, y, name){
             $('#cityName').empty()
             $('#cityName').append("<h1 class=\"h6 mb-0 text-white lh-1\">"+ name +" 날씨</h1>")
@@ -76,8 +70,8 @@
                             let day = daily.day
                             let sunrise = daily.sunrise
                             let sunset = daily.sunset
-                            let dayTempMax = daily.dayTempMax
-                            let dayTempMin = daily.dayTempMin
+                            let dayTempMax = parseFloat(daily.dayTempMax).toFixed()
+                            let dayTempMin = parseFloat(daily.dayTempMin).toFixed()
                             let uvi = daily.uvi
                             let pop = (daily.pop*100).toFixed();
                             let wind = daily.wind
@@ -364,7 +358,7 @@
     }
 
 </script>
-<main style="display: none" id="container" class="container">
+<main id="container" class="container">
     <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
         <div id="cityName" class="lh-1">
         </div>
