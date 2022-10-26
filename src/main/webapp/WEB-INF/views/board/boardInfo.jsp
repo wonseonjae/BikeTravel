@@ -128,7 +128,7 @@
 		}
 
 		function doEdit() {
-			if ("<%=edit%>" === 2) {
+			if ("<%=edit%>" == 2) {
 				location.href = "/board/boardEditInfo?nSeq=<%=CmmUtil.nvl(String.valueOf(rDTO.getBoard_no()))%>";
 
 			} else if ("<%=edit%>" === 3) {
@@ -153,7 +153,7 @@
 			}
 		}
 		function repDelete(cNo) {
-			if ("<%=edit%>" == 2 ){
+
 				let comment_no = cNo
 				let data = new Array();
 				let obj = new Object();
@@ -171,12 +171,6 @@
 						},
 					})
 				}
-			}
-			 else {
-				alert("본인이 작성한 댓글만 삭제 가능합니다.");
-				location.reload()
-
-			}
 		}
 
 		//목록으로 이동

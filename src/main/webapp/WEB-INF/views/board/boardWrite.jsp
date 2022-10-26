@@ -206,7 +206,7 @@
 <div class="ui middle aligned center aligned grid">
 	<div class="column">
 		<h2 class="ui teal image header">
-			동호회 수정
+			게시판 작성
 		</h2>
 		<form method="post" class="ui large form" encType="multipart/form-data" action="/upload">
 			<div class="ui stacked segment">
